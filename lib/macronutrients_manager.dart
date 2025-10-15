@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'database_service.dart';
 
 // Classe para gerenciar macronutrientes
@@ -9,7 +10,11 @@ class MacronutrientsManager {
     return _instance!;
   }
 
-  MacronutrientsManager._();
+  MacronutrientsManager._() {
+    _logger = Logger('MacronutrientsManager');
+  }
+
+  late final Logger _logger;
 
   final ValueNotifier<MacronutrientsData> _dataNotifier = ValueNotifier(
     MacronutrientsData(),
@@ -22,7 +27,7 @@ class MacronutrientsManager {
       final activities = await DatabaseService.instance.getAllActivities();
       updateFromActivities(activities);
     } catch (e) {
-      print('Erro ao carregar atividades do banco: $e');
+      _logger.severe('Erro ao carregar atividades do banco: $e');
     }
   }
 

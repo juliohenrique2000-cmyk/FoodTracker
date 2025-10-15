@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'home.dart';
 
 void main() {
@@ -28,6 +29,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final Logger _logger = Logger('LoginScreen');
 
   void _fazerLogin() {
     String email = _emailController.text;
@@ -35,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // Aqui você pode implementar a lógica de autenticação
     if (email.isNotEmpty && senha.isNotEmpty) {
-      print("Login com: $email / $senha");
+      _logger.info("Login com: $email / $senha");
       // Navegar para a próxima tela ou mostrar sucesso
       Navigator.pushReplacement(
         context,

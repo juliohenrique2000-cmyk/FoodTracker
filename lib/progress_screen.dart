@@ -54,7 +54,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
         );
       });
     } catch (e) {
-      print('Erro ao carregar atividades: $e');
+      debugPrint('Erro ao carregar atividades: $e');
     }
   }
 
@@ -62,23 +62,27 @@ class _ProgressScreenState extends State<ProgressScreen> {
     if (_activityController.text.isEmpty ||
         _durationController.text.isEmpty ||
         _selectedActivityType == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, preencha todos os campos'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, preencha todos os campos'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
     final duration = int.tryParse(_durationController.text);
     if (duration == null || duration <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Duração deve ser um número válido'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Duração deve ser um número válido'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
@@ -136,21 +140,25 @@ class _ProgressScreenState extends State<ProgressScreen> {
       // Atualizar macronutrientes na tela inicial
       MacronutrientsManager.instance.updateFromActivities(_activities);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Atividade adicionada! ${totalCalories.round()} calorias',
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Atividade adicionada! ${totalCalories.round()} calorias',
+            ),
+            backgroundColor: Colors.green,
           ),
-          backgroundColor: Colors.green,
-        ),
-      );
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro ao salvar atividade'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erro ao salvar atividade'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -169,12 +177,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
       // Atualizar macronutrientes na tela inicial
       MacronutrientsManager.instance.updateFromActivities(_activities);
     } catch (e) {
+      if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro ao remover atividade'),
           backgroundColor: Colors.red,
         ),
       );
+     }
     }
   }
 
@@ -196,12 +206,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
       // Atualizar macronutrientes na tela inicial
       MacronutrientsManager.instance.updateFromActivities(_activities);
     } catch (e) {
+      if (mounted){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro ao atualizar atividade'),
           backgroundColor: Colors.red,
         ),
       );
+      }
     }
   }
 
