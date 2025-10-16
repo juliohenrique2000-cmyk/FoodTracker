@@ -1,19 +1,36 @@
-# Flutter App - Home Screen Implementation
+# Backend Structure with Prisma ORM and Docker PostgreSQL
 
 ## Completed Tasks ✅
-- [x] Create HomeScreen widget class with centered "home" text
-- [x] Modify _fazerLogin() method to navigate to HomeScreen on successful login
-- [x] Implement Navigator.pushReplacement() to replace login screen with home screen
-- [x] Add AppBar with "Home" title to HomeScreen
+- [x] Create backend directory structure
+- [x] Set up package.json with dependencies (Prisma, Express, CORS)
+- [x] Create Prisma schema based on Activity model
+- [x] Set up docker-compose.yml for PostgreSQL
+- [x] Create .env file with database URL
+- [x] Implement Express server with CRUD endpoints for activities
+- [x] Create .gitignore for backend
+- [x] Update README.md with setup instructions
 
 ## Implementation Details
-- **HomeScreen**: StatelessWidget with Scaffold, AppBar, and centered "home" text
-- **Navigation**: Uses Navigator.pushReplacement() to prevent users from going back to login screen
-- **Login Logic**: Maintains existing validation for empty fields
-- **UI**: Clean, simple design matching the existing app theme
+- **Backend**: Node.js with Express and Prisma ORM
+- **Database**: PostgreSQL via Docker Compose
+- **Schema**: Activity model matching Flutter app structure
+- **API**: RESTful endpoints for activities CRUD operations
+- **Environment**: .env for database configuration
+
+## Next Steps
+- [ ] Install Node.js (if not installed)
+- [ ] Install Docker Desktop
+- [ ] Run `docker-compose up -d` to start PostgreSQL
+- [ ] Navigate to backend directory
+- [ ] Run `npm install` to install dependencies
+- [ ] Run `npm run prisma:migrate` to create database tables
+- [ ] Run `npm run prisma:generate` to generate Prisma client
+- [ ] Run `npm run dev` to start the server
+- [ ] Test API endpoints at http://localhost:3000
 
 ## Testing Checklist
-- [ ] Test login with valid credentials (should navigate to home screen)
-- [ ] Test login with empty fields (should show validation message)
-- [ ] Verify back button behavior (should not allow returning to login)
-- [ ] Check UI layout and styling
+- [ ] Verify PostgreSQL container is running
+- [ ] Check if npm install completes successfully
+- [ ] Confirm Prisma migration creates tables
+- [ ] Test API endpoints with tools like Postman or curl
+- [ ] Verify data persistence in database
