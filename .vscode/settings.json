@@ -1,0 +1,9 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "editor.codeLens": true,
+  "editor.formatOnSave": true,
+  "errorLens.onSave": true,
+  "dart.flutterHotReloadOnSave": "allIfDirty"
+}
