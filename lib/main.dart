@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'home.dart';
 
 void main() {
@@ -31,18 +33,36 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _senhaController = TextEditingController();
   final Logger _logger = Logger('LoginScreen');
 
-  void _fazerLogin() {
+  Future<void> _fazerLogin() async {
     String email = _emailController.text;
     String senha = _senhaController.text;
 
-    // Aqui você pode implementar a lógica de autenticação
     if (email.isNotEmpty && senha.isNotEmpty) {
-      _logger.info("Login com: $email / $senha");
-      // Navegar para a próxima tela ou mostrar sucesso
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const FitnessHomePage()),
-      );
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:3000/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': email, 'password': senha}),
+        );
+
+        if (response.statusCode == 200) {
+          _logger.info("Login successful for: $email");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const FitnessHomePage()),
+          );
+        } else {
+          _logger.warning("Login failed for: $email");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Credenciais inválidas')),
+          );
+        }
+      } catch (e) {
+        _logger.severe("Error during login: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro ao conectar ao servidor')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(
         context,
