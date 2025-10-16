@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'home.dart';
+import 'registration_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -103,6 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(onPressed: _fazerLogin, child: const Text('Entrar')),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RegistrationScreen(),
+                  ),
+                );
+              },
+              child: const Text('Cadastre-se'),
+            ),
           ],
         ),
       ),

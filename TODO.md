@@ -1,8 +1,4 @@
-# TODO: Implement Login Functionality
-
-- [x] Run Prisma migration for schema change (password from Int to String) - Already updated by user
-- [x] Update backend/src/server.js: Add POST /login route to verify user credentials
-- [x] Update pubspec.yaml: Add http package dependency
-- [x] Update lib/main.dart: Change email field to name field, modify _fazerLogin to send POST request to backend login endpoint
-- [ ] Start the backend server
-- [ ] Test the login functionality
+- [x] Criar tela de cadastro (lib/registration_screen.dart) com campos nome, email, senha e botão de cadastro
+- [x] Adicionar botão "Cadastre-se" na tela de login (lib/main.dart) que navega para a tela de cadastro
+- [ ] Testar navegação no app
+- [x] Adicionar endpoint de registro no backend (schema.prisma, server.js, migração DB)

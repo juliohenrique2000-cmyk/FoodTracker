@@ -54,6 +54,25 @@ app.delete('/activities/:id', async (req, res) => {
   }
 });
 
+// Register route
+app.post('/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email }
+    });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+    const user = await prisma.user.create({
+      data: { name, email, password }
+    });
+    res.status(201).json({ message: 'User registered successfully', user: { id: user.id, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Login route
 app.post('/login', async (req, res) => {
   try {
