@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/activities', async (req, res) => {
+app.get('/activities', async(req, res) => {
   try {
     const activities = await prisma.activity.findMany();
     res.json(activities);
@@ -18,7 +18,7 @@ app.get('/activities', async (req, res) => {
   }
 });
 
-app.post('/activities', async (req, res) => {
+app.post('/activities', async(req, res) => {
   try {
     const activity = await prisma.activity.create({
       data: req.body
@@ -29,7 +29,7 @@ app.post('/activities', async (req, res) => {
   }
 });
 
-app.put('/activities/:id', async (req, res) => {
+app.put('/activities/:id', async(req, res) => {
   try {
     const { id } = req.params;
     const activity = await prisma.activity.update({
@@ -42,7 +42,7 @@ app.put('/activities/:id', async (req, res) => {
   }
 });
 
-app.delete('/activities/:id', async (req, res) => {
+app.delete('/activities/:id', async(req, res) => {
   try {
     const { id } = req.params;
     await prisma.activity.delete({
