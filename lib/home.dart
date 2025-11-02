@@ -2,61 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'receipts.dart';
 import 'progress.dart';
-
-// Classe para gerenciar macronutrientes
-class MacronutrientsManager {
-  static MacronutrientsManager? _instance;
-  static MacronutrientsManager get instance {
-    _instance ??= MacronutrientsManager._();
-    return _instance!;
-  }
-
-  MacronutrientsManager._();
-
-  final ValueNotifier<MacronutrientsData> _dataNotifier = ValueNotifier(
-    MacronutrientsData(),
-  );
-
-  ValueNotifier<MacronutrientsData> get dataNotifier => _dataNotifier;
-
-  void updateFromActivities(List<Activity> activities) {
-    double totalProtein = 0.0;
-    double totalCarbs = 0.0;
-    double totalFats = 0.0;
-
-    for (var activity in activities) {
-      totalProtein += activity.protein;
-      totalCarbs += activity.carbs;
-      totalFats += activity.fats;
-    }
-
-    _dataNotifier.value = MacronutrientsData(
-      protein: totalProtein,
-      carbs: totalCarbs,
-      fats: totalFats,
-    );
-  }
-}
-
-class MacronutrientsData {
-  final double protein;
-  final double carbs;
-  final double fats;
-
-  MacronutrientsData({this.protein = 0.0, this.carbs = 0.0, this.fats = 0.0});
-
-  // Metas diárias recomendadas (em gramas)
-  static const double dailyProteinGoal = 150.0;
-  static const double dailyCarbsGoal = 300.0;
-  static const double dailyFatsGoal = 65.0;
-
-  double get proteinProgress => protein / dailyProteinGoal;
-  double get carbsProgress => carbs / dailyCarbsGoal;
-  double get fatsProgress => fats / dailyFatsGoal;
-}
+import 'macronutrients_manager.dart';
 
 class FitnessHomePage extends StatefulWidget {
-  const FitnessHomePage({super.key});
+  final String userName;
+  const FitnessHomePage({super.key, required this.userName});
 
   @override
   State<FitnessHomePage> createState() => _FitnessHomePageState();
@@ -64,6 +14,16 @@ class FitnessHomePage extends StatefulWidget {
 
 class _FitnessHomePageState extends State<FitnessHomePage> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadActivities();
+  }
+
+  Future<void> _loadActivities() async {
+    await MacronutrientsManager.instance.loadActivitiesFromApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +113,15 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
 
   String _getGreeting() {
     var hour = DateTime.now().hour;
+    String baseGreeting;
     if (hour < 12) {
-      return 'Bom dia';
+      baseGreeting = 'Bom dia';
     } else if (hour < 18) {
-      return 'Boa tarde';
+      baseGreeting = 'Boa tarde';
     } else {
-      return 'Boa noite';
+      baseGreeting = 'Boa noite';
     }
+    return '$baseGreeting, ${widget.userName}';
   }
 
   Widget _buildGreetingSection(String greeting) {

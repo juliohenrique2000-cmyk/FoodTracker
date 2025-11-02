@@ -33,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final Logger _logger = Logger('LoginScreen');
+  Map<String, dynamic>? _userData;
 
   Future<void> _fazerLogin() async {
     String email = _emailController.text;
@@ -47,10 +48,15 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          _userData = responseData['user'];
           _logger.info("Login successful for: $email");
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const FitnessHomePage()),
+            MaterialPageRoute(
+              builder: (context) =>
+                  FitnessHomePage(userName: _userData?['name'] ?? 'Usuário'),
+            ),
           );
         } else {
           _logger.warning("Login failed for: $email");

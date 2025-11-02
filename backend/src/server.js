@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
       where: { email: email }
     });
     if (user && user.password === password) {
-      res.json({ message: 'Login successful', user: { id: user.id, email: user.email } });
+      res.json({ message: 'Login successful', user: { id: user.id, email: user.email, name: user.name } });
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }

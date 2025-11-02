@@ -82,7 +82,7 @@ class Activity {
   final double protein;
   final double carbs;
   final double fats;
-  final bool isCompleted;
+  bool isCompleted;
   final DateTime createdAt;
 
   Activity({

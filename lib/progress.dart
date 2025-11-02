@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'macronutrients_manager.dart';
+import 'database_service.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -15,6 +16,25 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   String? _selectedActivityType;
   double _totalCalories = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadActivities();
+  }
+
+  Future<void> _loadActivities() async {
+    final activities = await DatabaseService.instance.getAllActivities();
+    setState(() {
+      _activities.clear();
+      _activities.addAll(activities);
+      _totalCalories = activities.fold(
+        0.0,
+        (sum, activity) => sum + activity.calories,
+      );
+    });
+    MacronutrientsManager.instance.updateFromActivities(_activities);
+  }
 
   final Map<String, double> _caloriesPerMinute = {
     'Corrida': 10.0,
@@ -36,27 +56,31 @@ class _ProgressScreenState extends State<ProgressScreen> {
     super.dispose();
   }
 
-  void _addActivity() {
+  Future<void> _addActivity() async {
     if (_activityController.text.isEmpty ||
         _durationController.text.isEmpty ||
         _selectedActivityType == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, preencha todos os campos'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, preencha todos os campos'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
     final duration = int.tryParse(_durationController.text);
     if (duration == null || duration <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Duração deve ser um número válido'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Duração deve ser um número válido'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
 
@@ -84,39 +108,64 @@ class _ProgressScreenState extends State<ProgressScreen> {
     final carbs = macros['carbs']! * duration;
     final fats = macros['fats']! * duration;
 
-    setState(() {
-      _activities.add(
-        Activity(
-          name: _activityController.text,
-          type: _selectedActivityType!,
-          duration: duration,
-          calories: totalCalories,
-          protein: protein,
-          carbs: carbs,
-          fats: fats,
-          isCompleted: false,
-        ),
-      );
-      _totalCalories += totalCalories;
-    });
-
-    _activityController.clear();
-    _durationController.clear();
-    _selectedActivityType = null;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Atividade adicionada! ${totalCalories.round()} calorias',
-        ),
-        backgroundColor: Colors.green,
-      ),
+    final newActivity = Activity(
+      name: _activityController.text,
+      type: _selectedActivityType!,
+      duration: duration,
+      calories: totalCalories,
+      protein: protein,
+      carbs: carbs,
+      fats: fats,
+      isCompleted: false,
+      createdAt: DateTime.now(),
     );
+
+    try {
+      final activityId = await DatabaseService.instance.insertActivity(
+        newActivity,
+      );
+
+      setState(() {
+        final activityWithId = newActivity.copyWith(id: activityId);
+        _activities.add(activityWithId);
+        _totalCalories += totalCalories;
+      });
+
+      _activityController.clear();
+      _durationController.clear();
+      _selectedActivityType = null;
+
+      // Atualizar macronutrientes na tela inicial
+      MacronutrientsManager.instance.updateFromActivities(_activities);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Atividade adicionada! ${totalCalories.round()} calorias',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erro ao salvar atividade'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
-  void _removeActivity(int index) {
+  Future<void> _removeActivity(int index) async {
+    final activity = _activities[index];
+    await DatabaseService.instance.deleteActivity(activity.id!);
+
     setState(() {
-      _totalCalories -= _activities[index].calories;
+      _totalCalories -= activity.calories;
       _activities.removeAt(index);
     });
 
@@ -454,10 +503,15 @@ class _ProgressScreenState extends State<ProgressScreen> {
         children: [
           Checkbox(
             value: activity.isCompleted,
-            onChanged: (bool? value) {
+            onChanged: (bool? value) async {
+              final newValue = value ?? false;
               setState(() {
-                activity.isCompleted = value ?? false;
+                activity.isCompleted = newValue;
               });
+
+              // Update in database
+              final updatedActivity = activity.copyWith(isCompleted: newValue);
+              await DatabaseService.instance.updateActivity(updatedActivity);
 
               // Atualizar macronutrientes na tela inicial
               MacronutrientsManager.instance.updateFromActivities(_activities);
@@ -601,26 +655,4 @@ class _ProgressScreenState extends State<ProgressScreen> {
       ],
     );
   }
-}
-
-class Activity {
-  final String name;
-  final String type;
-  final int duration;
-  final double calories;
-  final double protein;
-  final double carbs;
-  final double fats;
-  bool isCompleted;
-
-  Activity({
-    required this.name,
-    required this.type,
-    required this.duration,
-    required this.calories,
-    required this.protein,
-    required this.carbs,
-    required this.fats,
-    this.isCompleted = false,
-  });
 }
