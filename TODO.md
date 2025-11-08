@@ -1,9 +1,14 @@
-# TODO: Implementar edição de alimentos na despensa
+# TODO: Add Photo and Date of Birth to User Registration
 
-- [ ] Modificar ListTile no _buildPantryList para incluir botão de editar (usando Row com ícones de editar e deletar)
-- [ ] Adicionar função _editPantryItem(PantryItem item) que abre o dialog de edição
-- [ ] Modificar AddPantryItemDialog para aceitar parâmetro opcional PantryItem? itemToEdit
-- [ ] Preencher campos no dialog se itemToEdit for fornecido e mudar título para "Editar Alimento"
-- [ ] Atualizar _submitForm para chamar onItemEdited se for edição
-- [ ] Adicionar callback onItemEdited no PantryScreen que faz PUT request e recarrega lista
-- [ ] Testar funcionalidade de edição
+## Backend Updates
+- [x] Update backend/prisma/schema.prisma: Add photo (String?) and dateOfBirth (DateTime?) to User model
+- [x] Run prisma generate to update the client
+- [x] Update backend/src/server.js: Modify /register route to accept and store photo and dateOfBirth
+
+## Frontend Updates
+- [x] Update lib/registration_screen.dart: Add TextField for photo URL and DatePicker for date of birth
+- [x] Update _register method in registration_screen.dart to send new fields in JSON
+
+## Testing
+- [ ] Test registration with new fields to ensure backend accepts and stores them
+- [ ] Verify frontend collects and sends photo and dateOfBirth correctly

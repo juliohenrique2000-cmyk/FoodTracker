@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'receipts.dart';
-import 'progress.dart';
-import 'macronutrients_manager.dart';
 import 'pantry_screen.dart';
+import 'profile_screen.dart';
 
 class FitnessHomePage extends StatefulWidget {
   final String userName;
-  const FitnessHomePage({super.key, required this.userName});
+  final Map<String, dynamic> userData;
+  const FitnessHomePage({
+    super.key,
+    required this.userName,
+    required this.userData,
+  });
 
   @override
   State<FitnessHomePage> createState() => _FitnessHomePageState();
@@ -19,12 +23,12 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
   @override
   void initState() {
     super.initState();
-    _loadActivities();
+    // _loadActivities(); // Commented out as progress is removed
   }
 
-  Future<void> _loadActivities() async {
-    await MacronutrientsManager.instance.loadActivitiesFromApi();
-  }
+  // Future<void> _loadActivities() async {
+  //   await MacronutrientsManager.instance.loadActivitiesFromApi();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +45,9 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       case 1:
         return const ReceiptsScreen();
       case 2:
-        return const ProgressScreen();
+        return PantryScreen(userData: widget.userData);
       case 3:
-        return const PantryScreen();
-      case 4:
-        return const PlaceholderScreen(title: 'Perfil');
+        return ProfileScreen(userData: widget.userData);
       default:
         return _buildHomeScreen();
     }
@@ -150,10 +152,19 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 30,
             backgroundColor: Colors.white,
-            child: Icon(Icons.person, size: 30, color: Color(0xFF4CAF50)),
+            backgroundImage:
+                widget.userData['photo'] != null &&
+                    widget.userData['photo'].isNotEmpty
+                ? NetworkImage(widget.userData['photo'])
+                : null,
+            child:
+                widget.userData['photo'] == null ||
+                    widget.userData['photo'].isEmpty
+                ? const Icon(Icons.person, size: 30, color: Color(0xFF4CAF50))
+                : null,
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -256,71 +267,38 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
   }
 
   Widget _buildDailyProgress() {
-    return ValueListenableBuilder<MacronutrientsData>(
-      valueListenable: MacronutrientsManager.instance.dataNotifier,
-      builder: (context, macroData, child) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withValues(alpha: 0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Progresso Diário',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  Text(
-                    'Baseado nas atividades',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _buildMacroProgressItem(
-                'Proteínas',
-                macroData.protein,
-                MacronutrientsData.dailyProteinGoal,
-                Colors.green,
-              ),
-              const SizedBox(height: 12),
-              _buildMacroProgressItem(
-                'Carboidratos',
-                macroData.carbs,
-                MacronutrientsData.dailyCarbsGoal,
-                Colors.orange,
-              ),
-              const SizedBox(height: 12),
-              _buildMacroProgressItem(
-                'Gorduras',
-                macroData.fats,
-                MacronutrientsData.dailyFatsGoal,
-                Colors.purple,
-              ),
-            ],
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Progresso Diário',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
           ),
-        );
-      },
+          const SizedBox(height: 16),
+          _buildProgressItem('Proteínas', 0.7, Colors.green),
+          const SizedBox(height: 12),
+          _buildProgressItem('Carboidratos', 0.5, Colors.orange),
+          const SizedBox(height: 12),
+          _buildProgressItem('Gorduras', 0.3, Colors.purple),
+        ],
+      ),
     );
   }
 
@@ -378,36 +356,36 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
     );
   }
 
-  // Widget _buildProgressItem(String label, double progress, Color color) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(
-  //             label,
-  //             style: const TextStyle(
-  //               fontSize: 14,
-  //               fontWeight: FontWeight.w500,
-  //               color: Colors.black87,
-  //             ),
-  //           ),
-  //           Text(
-  //             '${(progress * 100).round()}%',
-  //             style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 4),
-  //       LinearProgressIndicator(
-  //         value: progress,
-  //         backgroundColor: Colors.grey[200],
-  //         valueColor: AlwaysStoppedAnimation<Color>(color),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _buildProgressItem(String label, double progress, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+            Text(
+              '${(progress * 100).round()}%',
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[200],
+          valueColor: AlwaysStoppedAnimation<Color>(color),
+        ),
+      ],
+    );
+  }
 
   Widget _buildQuickTips() {
     return Column(
@@ -575,10 +553,6 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
         BottomNavigationBarItem(
           icon: Icon(Icons.restaurant_menu),
           label: 'Receitas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.analytics),
-          label: 'Progresso',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.kitchen), label: 'Despensa'),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),

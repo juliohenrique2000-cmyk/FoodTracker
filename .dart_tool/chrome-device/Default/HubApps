@@ -1,5 +1,5 @@
 {
-   "current_locale": "pt-BR",
+   "current_locale": "en-US",
    "hub_apps": [ {
       "auto_open_v2": [ {
          "approved_channels": [ "canary" ],
@@ -26,10 +26,10 @@
             "builtin_icon": "Reload"
          },
          "location": "header_button",
-         "name": "Recarregar"
+         "name": "Reload"
       } ],
       "default_locale": "en",
-      "description": "Informações contextualmente relevantes para qualquer página",
+      "description": "Contextually relevant info for any page",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_copilot_rainbow.png/1.3.23/asset",
@@ -147,7 +147,7 @@
          "deprecated_hide_header": true
       },
       "default_locale": "en",
-      "description": "Pesquise sem perder seu lugar",
+      "description": "Search without losing your place",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_search_maximal_dark.png/1.3.20/asset",
@@ -163,7 +163,7 @@
          "area_path": "Features\\Sidebar\\Search",
          "service_id": "c5fa07d0-62e6-46d4-a28a-ba4dcaced54f"
       },
-      "name": "Pesquisar",
+      "name": "Search",
       "notifications": {
          "enabled": true
       },
@@ -178,7 +178,7 @@
          "deprecated_hide_header": true
       },
       "default_locale": "en",
-      "description": "Obtenha informações contextuais sobre o conteúdo e a página da Web em que você está atualmente.",
+      "description": "Contextually relevant info for any page",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_chatB_active_dark.png/1.6.8/asset",
@@ -190,7 +190,7 @@
       "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkir9eBusSu3fIWbShjTCGKwVouE42cYbsA86vz0rVOp41mAegrFS8udIYkX9hhtwlRZ+VY3HNX5drrknB188JTpap5fCKuOc1e8GoFXEOXCdb9MHjLwZsFjB6lwQcCMqtBJSQs9zeO3FxyDkoU/KKWLIK4XCG8Mze5pVsGkIeRbjO8IR1/xhAyLbXItjstlbTk1z6kffUkXk47DYVtX8k8K5havcW9itCyRmVSl+yeTyORmiqJ2kafPALff5iHc11xogtv331dv7F2ZUsxcEKo0v3BeZvUnFiRFEh8iizlS3OY1vw9CA1kTFpaMUFKCf2xMbWNraNgAGGi32wApvNQIDAQAB",
       "locales": [ "af", "am", "ar", "as", "az", "bg", "bn_IN", "bs", "ca", "ca_Es_VALENCIA", "cs", "cy", "da", "de", "el", "en", "en_GB", "es", "es_MX", "et", "eu", "fa", "fi", "fil", "fil", "fr", "fr_CA", "ga", "gd", "gl", "gu", "he", "hi", "hr", "hu", "hy", "id", "is", "it", "ja", "ka", "kk", "km", "kn", "ko", "kok", "kok", "lb", "lo", "lt", "lv", "mi", "mk", "ml", "mr", "ms", "mt", "nb", "ne", "nl", "nn", "or", "pa", "pl", "pt_BR", "pt_PT", "quz", "ro", "ru", "sk", "sl", "sq", "sr_Cyrl_BA", "sr_Cyrl_RS", "sr_Latn_RS", "sv", "ta", "te", "th", "tr", "tt", "ug", "uk", "ur", "uz", "vi", "zh_CN", "zh_TW" ],
       "manifest_version": 3,
-      "name": "Descobrir",
+      "name": "Discover",
       "notifications": {
          "enabled": true
       },
@@ -251,7 +251,7 @@
             }
          },
          "location": "header_context_menu",
-         "name": "Configurações de compras"
+         "name": "Shopping settings"
       } ],
       "custom_actions|flight:msEdgeShoppingRefresh": [ {
          "action": {
@@ -266,7 +266,7 @@
             }
          },
          "location": "header_context_menu",
-         "name": "Configurações de compras"
+         "name": "Shopping settings"
       }, {
          "action": {
             "target": "sidepane",
@@ -276,10 +276,10 @@
             "builtin_icon": "Reload"
          },
          "location": "header_button",
-         "name": "Atualizar"
+         "name": "Refresh"
       } ],
       "default_locale": "en",
-      "description": "Cupons, compare as economias e economize dinheiro enquanto faz compras",
+      "description": "Coupons, compare savings and save money while you shop",
       "disabled": false,
       "disabled|flight:msEdgeHubAppDisableShopping": true,
       "icon": {
@@ -298,7 +298,7 @@
          "area_path": "Shopping",
          "service_id": "16236ae0-419b-4e28-b29d-9a69f25d8428"
       },
-      "name": "Compras da Microsoft",
+      "name": "Microsoft Shopping",
       "notifications": {
          "enabled": true
       },
@@ -337,10 +337,10 @@
             }
          },
          "location": "header_button",
-         "name": "Abrir Configurações"
+         "name": "Open Settings"
       } ],
       "default_locale": "en",
-      "description": "Fácil acesso a ferramentas comumente usadas",
+      "description": "Easy access to commonly used tools",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_toolbox_maximal_dark.png/1.5.18/asset",
@@ -356,7 +356,7 @@
          "area_path": "Features\\Sidebar\\Tools",
          "service_id": "07181d09-bb0c-4be4-a804-9875fb000755"
       },
-      "name": "Ferramentas",
+      "name": "Tools",
       "target": {
          "url": "https://edgeservices.bing.com/edgesvc/toolbox?lightschemeovr=1",
          "url|flight:msEdgeHubAppToolsVnext": "https://edgeservices.bing.com/edgesvc/toolbox?lightschemeovr=1",
@@ -383,10 +383,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir link em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Jogue jogos populares gratuitamente",
+      "description": "Play popular games for free",
       "disabled|locale:vi": true,
       "icon": {
          "raster_icon": {
@@ -423,7 +423,7 @@
          "area_path": "Features\\Sidebar\\Gaming",
          "service_id": "f31588cc-c9db-465c-9b8b-099b79dd9ac1"
       },
-      "name": "Jogos",
+      "name": "Games",
       "notifications": {
          "enabled": true,
          "triggers|flight:msHubAppsGamesCNPop|market:CN": [ {
@@ -490,7 +490,7 @@
             }
          },
          "location": "hovercard",
-         "name": "Criar novo documento"
+         "name": "Create new document"
       }, {
          "action": {
             "target": "new_tab",
@@ -503,7 +503,7 @@
             }
          },
          "location": "hovercard",
-         "name": "Criar nova pasta de trabalho"
+         "name": "Create new workbook"
       }, {
          "action": {
             "target": "new_tab",
@@ -516,7 +516,7 @@
             }
          },
          "location": "hovercard",
-         "name": "Criar nova apresentação"
+         "name": "Create new presentation"
       }, {
          "action": {
             "target": "sidepane",
@@ -527,12 +527,12 @@
             "builtin_icon": "Search"
          },
          "location": "header_button",
-         "name": "Pesquisar"
+         "name": "Search"
       } ],
       "custom_actions|auth:aad|flight:msEdgeSharedLinksHubApp": [  ],
       "custom_actions|flight:msEdgeHubAppOfficePlusChina": [  ],
       "default_locale": "en",
-      "description": "Acesse o Microsoft 365 Apps gratuitamente",
+      "description": "Access Microsoft 365 apps for free",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_M365_dark.png/1.7.43/asset",
@@ -573,12 +573,12 @@
          "enabled": true,
          "fallback_notification": {
             "show_count": 5,
-            "text": "Exibir email de origem"
+            "text": "View source email"
          },
          "footer": {
             "enabled": true,
             "open_count": 10,
-            "text": "Veja seu email lado a lado com o link que você abriu"
+            "text": "See your email side-by-side with the link you opened"
          },
          "force_auto_open": true,
          "id": "f5b8c725-cb2e-4c12-accd-73e500d88d47",
@@ -587,7 +587,7 @@
          "non_visible_user_friendly_name": "Win32 Outlook Protocol launch",
          "red_dot_notification_data": {
             "footer": {
-               "description": "Veja seu email lado a lado com o link que você abriu",
+               "description": "See your email side-by-side with the link you opened",
                "enabled": true
             }
          },
@@ -595,26 +595,26 @@
             "time_to_live_sec": 86400
          },
          "settings_toggle": {
-            "description": "Quando um link da Web for aberto de um email do Outlook, o painel lateral será aberto automaticamente para mostrar esse email para contexto.",
+            "description": "When a web link is opened from an Outlook email, the side pane will automatically open to show that email for context.",
             "learn_more_link": "https://go.microsoft.com/fwlink/?linkid=2213996",
-            "title": "Abrir automaticamente o contexto de email do Outlook no painel lateral"
+            "title": "Automatically open Outlook email context in the side pane"
          }
       } ],
       "auto_show": {
          "enabled": false,
          "fre_notification": {
             "enabled": true,
-            "header": "Abrimos o Outlook para mostrar seu email lado a lado com o link que você abriu",
+            "header": "We opened Outlook to show your email side-by-side with the link you opened",
             "show_count": 3,
-            "text": "Abrimos o Outlook para mostrar seu email lado a lado com o link que você abriu"
+            "text": "We opened Outlook to show your email side-by-side with the link you opened"
          },
          "lifetime": "tab",
          "remember_context": {
             "time_to_live_sec": 86400
          },
-         "settings_description": "Quando um link da Web for aberto de um email do Outlook, o painel lateral será aberto automaticamente para mostrar esse email para contexto.",
+         "settings_description": "When a web link is opened from an Outlook email, the side pane will automatically open to show that email for context.",
          "settings_learn_more_link": "https://go.microsoft.com/fwlink/?linkid=2213996",
-         "settings_title": "Abrir automaticamente o contexto de email do Outlook no painel lateral"
+         "settings_title": "Automatically open Outlook email context in the side pane"
       },
       "capabilities": {
          "enable_force_dark_mode": true,
@@ -631,7 +631,7 @@
             "builtin_icon": "NewEmail"
          },
          "location": "hovercard",
-         "name": "Redigir novo email"
+         "name": "Compose new email"
       }, {
          "action": {
             "target": "sidepane",
@@ -643,7 +643,7 @@
             "builtin_icon": "NewEvent"
          },
          "location": "hovercard",
-         "name": "Criar um novo evento"
+         "name": "Create new event"
       }, {
          "action": {
             "target": "sidepane",
@@ -655,10 +655,10 @@
             "builtin_icon": "Home"
          },
          "location": "header_button",
-         "name": "Início"
+         "name": "Home"
       } ],
       "default_locale": "en",
-      "description": "Verifique o email enquanto permanece no seu fluxo",
+      "description": "Check email while staying in your flow",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_outlook_dark.png/1.12.17/asset",
@@ -752,7 +752,7 @@
             "builtin_icon": "Settings"
          },
          "location": "header_context_menu",
-         "name": "configurações do Drop"
+         "name": "Drop settings"
       }, {
          "action": {
             "event": "action_refresh_sync",
@@ -762,10 +762,10 @@
             "builtin_icon": "Reload"
          },
          "location": "header_button",
-         "name": "Atualizar"
+         "name": "Refresh"
       } ],
       "default_locale": "en",
-      "description": "Enviar arquivos em seus dispositivos móveis e da área de trabalho",
+      "description": "Send files across your mobile and desktop devices",
       "disabled|device:xbox": true,
       "icon": {
          "raster_icon": {
@@ -795,7 +795,7 @@
          "resize_disabled": true
       },
       "default_locale": "en",
-      "description": "Plante árvores para proteger nossa Terra juntos",
+      "description": "Plant trees to protect our earth together",
       "disabled": true,
       "flights": [  ],
       "icon": {
@@ -814,7 +814,7 @@
          "awareness_prompts": {
             "bubble_notifications": {
                "domains": [ "scorecard.org", "greenpeace.org", "sierraclub.org", "enn.com", "edf.org", "panda.org", "climateark.org", "unep.org", "conservation.org", "audubon.org", "earthday.net", "nature.org", "1800cleanup.org", "foe.org", "cleanup.com.au", "earthtimes.org", "ase.org", "nwf.org", "nature.com", "ucsusa.org", "amrivers.org", "epa.gov", "ran.org", "oneworld.net", "auduboninstitute.org", "earthvision.net", "earthwatch.org", "worldwatch.org", "crest.org", "ecologyfund.com", "therainforestsite.com", "climate.org", "treehugger.com", "saveourenvironment.org", "whitehouse.gov", "uli.org", "wcs.org", "rff.org", "wilderness.org", "ens-newswire.com", "earthsite.org", "sustainable.org", "wwfcanada.org", "weathervane.rff.org", "bbc.co.uksn", "faircompanies.com", "afdc.doe.gov", "earthcharter.org", "crest.orggem.html", "earthtrends.wri.org", "carfree.com", "awea.org", "envirosense.org", "cousteau.org", "davidsuzuki.org", "rainforestweb.org", "emagazine.com", "iucn.orgthemeslaw", "cnie.org", "amazonwatch.org", "fws.gov", "ata.org.au", "recycle.netrecycle", "eerc.und.nodak.edu", "recycle.com", "globalforestwatch.org", "nrdc.org.", "panda.org", "ccap.org", "ecoworld.com", "carnivorousplants.org", "envsc.org", "epa.gov", "ases.org", "noaa.gov", "ctic.purdue.edu", "cei.org", "ourplanet.com", "geocities.com", "ecowise.com", "ramsar.org", "sbeap.org", "wmo.ch", "ecobeetle.com", "cserc.org", "wetland.org", "earthhopenetwork.net", "savetherainforest.org", "wetlands.com", "karmavision.tv", "wildernesscommittee.org", "farmlandinfo.org", "scientific-alliance.com", "elpnet.org" ],
-               "text": "Obtenha sua semente gratuita"
+               "text": "Get your free seed"
             }
          },
          "enabled": true
@@ -829,7 +829,7 @@
          "show_domain_in_header": true
       },
       "default_locale": "en",
-      "description": "Faça anotações enquanto navega na Web",
+      "description": "Take notes as you browse the web",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_onenote_dark.png/1.4.13/asset",
@@ -845,7 +845,7 @@
          "area_path": "Features\\Sidebar\\OneNote",
          "service_id": "c32581fb-3108-4833-88dc-b4ef6bbb805e"
       },
-      "name": "Feed do OneNote",
+      "name": "OneNote Feed",
       "target": {
          "url": "https://www.onenote.com/stickynotes?isEdgeHub=true",
          "url|auth:aad": "https://www.onenote.com/stickynotes?isEdgeHub=true&auth=2",
@@ -899,10 +899,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Ouça música no Apple Music!",
+      "description": "Listen to music on Apple Music!",
       "device_emulation": "touch",
       "icon": {
          "raster_icon": {
@@ -937,10 +937,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Ouça música no Spotify!",
+      "description": "Listen to music on Spotify!",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_spotify.png/1.4.14/asset"
@@ -975,10 +975,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Ouça música na Amazon Music!",
+      "description": "Listen to music on Amazon Music!",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_amazon_music_light.png/1.4.13/asset"
@@ -1082,10 +1082,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Converse com pessoas por meio do Messenger",
+      "description": "Chat with people via Messenger",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_facebook_messenger.png/1.5.15/asset"
@@ -1121,10 +1121,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Converse com pessoas por meio do Instagram",
+      "description": "Chat with people via Instagram",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_instagram.png/1.4.13/asset"
@@ -1291,10 +1291,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Converse com pessoas por meio do WhatsApp",
+      "description": "Chat with people via WhatsApp",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_whatsapp_light.png/1.4.12/asset"
@@ -1330,12 +1330,12 @@
          "enabled": true,
          "fallback_notification": {
             "show_count": 5,
-            "text": "Ver o chat do Teams"
+            "text": "View your Teams chat"
          },
          "footer": {
             "enabled": true,
             "open_count": 10,
-            "text": "Veja seu chat lado a lado com o link que você abriu"
+            "text": "See your chat side-by-side with the link you opened"
          },
          "force_auto_open": true,
          "id": "68b8a884-6e08-46e6-8a3b-7e06ffe48ecf",
@@ -1344,7 +1344,7 @@
          "non_visible_user_friendly_name": "Win32 Teams Protocol launch",
          "red_dot_notification_data": {
             "footer": {
-               "description": "Veja seu chat lado a lado com o link que você abriu",
+               "description": "See your chat side-by-side with the link you opened",
                "enabled": true
             }
          },
@@ -1352,9 +1352,9 @@
             "time_to_live_sec": 86400
          },
          "settings_toggle": {
-            "description": "Quando um link da Web for aberto de um chat do Teams, o painel lateral mostrará esse chat para contexto.",
+            "description": "When a web link is opened from a Teams chat, the side pane will show that chat for context.",
             "learn_more_link": "https://go.microsoft.com/fwlink/?linkid=2213996",
-            "title": "Abrir automaticamente o contexto de chat do Teams no painel lateral"
+            "title": "Automatically open Teams chat context in the side pane"
          },
          "supported_platforms": [ "win", "mac" ]
       } ],
@@ -1362,25 +1362,25 @@
          "enabled": false,
          "fre_notification": {
             "enabled": true,
-            "header": "Abrimos o Teams para mostrar seu chat lado a lado com o link que você abriu",
+            "header": "We opened Teams to show your chat side-by-side with the link you opened",
             "show_count": 3,
-            "text": "Abrimos o Teams para mostrar seu chat lado a lado com o link que você abriu"
+            "text": "We opened Teams to show your chat side-by-side with the link you opened"
          },
          "lifetime": "tab",
          "lifetime|flight:msHubAppTeamsAutoShowWindowLifetime": "window",
          "remember_context": {
             "time_to_live_sec": 86400
          },
-         "settings_description": "Quando um link da Web for aberto de um chat do Teams, o painel lateral mostrará esse chat para contexto.",
+         "settings_description": "When a web link is opened from a Teams chat, the side pane will show that chat for context.",
          "settings_learn_more_link": "https://go.microsoft.com/fwlink/?linkid=2213996",
-         "settings_title": "Abrir automaticamente o contexto de chat do Teams no painel lateral"
+         "settings_title": "Automatically open Teams chat context in the side pane"
       },
       "capabilities": {
          "hide_navigation_buttons": true,
          "show_domain_in_header": true
       },
       "default_locale": "en",
-      "description": "Verifique seu chat enquanto permanece no fluxo",
+      "description": "Check your chat while staying in the flow",
       "disabled": true,
       "disabled|auth:aad": false,
       "dormancy": {
@@ -1427,10 +1427,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Verifique o email enquanto permanece no seu fluxo",
+      "description": "Check email while staying in your flow.",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_gmail.png/1.5.4/asset"
@@ -1445,7 +1445,7 @@
          "awareness_prompts": {
             "bubble_notifications": {
                "domains": [ "gmail.com" ],
-               "text": "Verifique seu email enquanto permanece no fluxo de seu navegador"
+               "text": "Check your mail while staying in your browser flow"
             }
          },
          "enabled": true
@@ -1469,10 +1469,10 @@
             "builtin_icon": "OpenInNew"
          },
          "location": "header_button",
-         "name": "Abrir em uma nova guia"
+         "name": "Open link in new tab"
       } ],
       "default_locale": "en",
-      "description": "Navegue pelos vídeos enquanto permanece no seu fluxo",
+      "description": "Browse videos while staying in your flow.",
       "icon": {
          "raster_icon": {
             "light_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_youtube.png/1.4.14/asset"
@@ -1507,10 +1507,10 @@
             "builtin_icon": "Reload"
          },
          "location": "header_button",
-         "name": "Atualizar"
+         "name": "Refresh"
       } ],
       "default_locale": "en",
-      "description": "Converse com pessoas por meio do Skype",
+      "description": "Chat with people via Skype",
       "disabled|auth:aad": true,
       "disabled|device:xbox": true,
       "icon": {
@@ -1585,7 +1585,7 @@
          "resize_disabled": true
       },
       "default_locale": "en",
-      "description": "Encontre filmes para o seu humor",
+      "description": "Easily browse and find movies that fit your mood",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_theater_maximal_dark.png/1.0.9/asset",
@@ -1609,7 +1609,7 @@
       "version": "1.0.9"
    }, {
       "default_locale": "en",
-      "description": "Ganhe recompensas do Microsoft Rewards apenas pesquisando, comprando e jogando com a Microsoft",
+      "description": "Earn valuable Microsoft Rewards just by searching, shopping, and gaming with Microsoft",
       "icon": {
          "raster_icon": {
             "dark_mode": "https://edgeassetservice.azureedge.net/assets/edge_hub_apps_rewards_maximal_dark.png/1.2.1/asset",
@@ -1719,7 +1719,7 @@
          "enabled|flight:msHubAppMsStartAutoOpenV2": true,
          "footer": {
             "open_count": 10,
-            "text": "Continue a explorar seu feed e tópicos relacionados enquanto você navega."
+            "text": "We opened the news feed in this sidebar so you can continue browsing."
          },
          "force_auto_open": false,
          "id": "c8ebbf64-e3b8-41d9-925f-4e3754151ff7",
@@ -1731,8 +1731,8 @@
             "time_to_live_sec": 86400
          },
          "settings_toggle": {
-            "description": "Permite que links de diferentes superfícies do Sistema Operacional Windows abram o Microsoft Start na barra lateral quando o Microsoft Edge é iniciado.",
-            "title": "Abrir automaticamente o Microsoft Start na barra lateral"
+            "description": "Allows links from different Windows OS surfaces to open Microsoft Start in the sidebar when Microsoft Edge is launched.",
+            "title": "Automatically open Microsoft Start in the sidebar"
          }
       }, {
          "approved_channels": [ "canary", "dev", "beta", "stable" ],
@@ -1817,7 +1817,7 @@
          "resize_disabled": true
       },
       "default_locale": "en",
-      "description": "Continue navegando em seu feed de notícias no Microsoft Start",
+      "description": "Continue browsing your news feed on Microsoft Start",
       "flights": [ "msEdgeHubAppStart", "msEdgeTransientAppAutoOpen" ],
       "icon": {
          "raster_icon": {

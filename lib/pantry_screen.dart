@@ -55,7 +55,8 @@ class PantryItem {
 }
 
 class PantryScreen extends StatefulWidget {
-  const PantryScreen({super.key});
+  final Map<String, dynamic> userData;
+  const PantryScreen({super.key, required this.userData});
 
   @override
   State<PantryScreen> createState() => _PantryScreenState();
@@ -75,6 +76,7 @@ class _PantryScreenState extends State<PantryScreen> {
     try {
       final response = await http.get(
         Uri.parse('http://localhost:3000/pantry'),
+        headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;
       if (response.statusCode == 200) {
@@ -101,7 +103,10 @@ class _PantryScreenState extends State<PantryScreen> {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:3000/pantry'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': widget.userData['id'].toString(),
+        },
         body: jsonEncode(item.toJson()),
       );
       if (!mounted) return;
@@ -125,7 +130,10 @@ class _PantryScreenState extends State<PantryScreen> {
     try {
       final response = await http.put(
         Uri.parse('http://localhost:3000/pantry/${item.id}'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': widget.userData['id'].toString(),
+        },
         body: jsonEncode(item.toJson()),
       );
       if (!mounted) return;
@@ -305,6 +313,7 @@ class _PantryScreenState extends State<PantryScreen> {
     try {
       final response = await http.delete(
         Uri.parse('http://localhost:3000/pantry/${item.id}'),
+        headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;
       if (response.statusCode == 200) {

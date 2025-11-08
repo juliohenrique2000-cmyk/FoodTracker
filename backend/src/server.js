@@ -117,7 +117,13 @@ app.put('/recipes/:id', async (req, res) => {
 // Pantry routes
 app.get('/pantry', async (req, res) => {
   try {
-    const pantryItems = await prisma.pantryItem.findMany();
+    const userId = req.headers['user-id'];
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+    const pantryItems = await prisma.pantryItem.findMany({
+      where: { userId: parseInt(userId) }
+    });
     res.json(pantryItems);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -127,12 +133,17 @@ app.get('/pantry', async (req, res) => {
 app.post('/pantry', async (req, res) => {
   try {
     const { name, photo, categories, type } = req.body;
+    const userId = req.headers['user-id'];
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
     const pantryItem = await prisma.pantryItem.create({
       data: {
         name,
         photo,
         categories,
-        type
+        type,
+        userId: parseInt(userId)
       }
     });
     res.json(pantryItem);

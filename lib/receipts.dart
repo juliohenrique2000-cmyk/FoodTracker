@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'recipe_api_service.dart';
 
 class ReceiptsScreen extends StatefulWidget {
   const ReceiptsScreen({super.key});
@@ -20,7 +21,72 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
     'Low Carb',
   ];
 
-  final List<Map<String, dynamic>> recipes = [
+  List<Map<String, dynamic>> recipes = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecipes();
+  }
+
+  Future<void> _loadRecipes() async {
+    try {
+      final fetchedRecipes = await RecipeApiService.fetchRecipes();
+      if (fetchedRecipes != null && fetchedRecipes.isNotEmpty) {
+        setState(() {
+          recipes = fetchedRecipes
+              .map((recipe) {
+                if (recipe == null) return null;
+                return {
+                  'name': recipe['receita'] ?? 'Receita sem nome',
+                  'category': _mapTypeToCategory(recipe['tipo']),
+                  'calories':
+                      300, // Placeholder, as API doesn't provide calories
+                  'time': 30, // Placeholder
+                  'difficulty': 'Fácil', // Placeholder
+                  'image': '🍽️', // Placeholder emoji
+                  'rating': 4.5, // Placeholder
+                  'ingredients': recipe['ingredientes']?.split(', ') ?? [],
+                  'description': recipe['modo_preparo'] ?? 'Sem descrição',
+                };
+              })
+              .where((recipe) => recipe != null)
+              .cast<Map<String, dynamic>>()
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao carregar receitas: $e')),
+        );
+      }
+    }
+  }
+
+  String _mapTypeToCategory(String? tipo) {
+    switch (tipo) {
+      case 'doce':
+        return 'Sobremesas';
+      case 'salgado':
+        return 'Jantar';
+      case 'agridoce':
+        return 'Lanches';
+      default:
+        return 'Almoço';
+    }
+  }
+
+  final List<Map<String, dynamic>> staticRecipes = [
     {
       'name': 'Salada Caesar Clássica',
       'category': 'Almoço',
@@ -115,9 +181,9 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
 
   List<Map<String, dynamic>> get filteredRecipes {
     if (selectedCategory == 'Todas') {
-      return recipes;
+      return recipes.isNotEmpty ? recipes : staticRecipes;
     }
-    return recipes
+    return (recipes.isNotEmpty ? recipes : staticRecipes)
         .where((recipe) => recipe['category'] == selectedCategory)
         .toList();
   }
@@ -152,14 +218,16 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
 
           // Recipes List
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: filteredRecipes.length,
-              itemBuilder: (context, index) {
-                final recipe = filteredRecipes[index];
-                return _buildRecipeCard(recipe);
-              },
-            ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filteredRecipes.length,
+                    itemBuilder: (context, index) {
+                      final recipe = filteredRecipes[index];
+                      return _buildRecipeCard(recipe);
+                    },
+                  ),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'home.dart';
 import 'registration_screen.dart';
+import 'recipe_api_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,15 +48,29 @@ class _LoginScreenState extends State<LoginScreen> {
           body: jsonEncode({'email': email, 'password': senha}),
         );
 
+        if (!mounted) return;
+
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
           _userData = responseData['user'];
           _logger.info("Login successful for: $email");
+
+          // Login to external recipe API
+          try {
+            await RecipeApiService.login(email, senha);
+            _logger.info("External API login successful for: $email");
+          } catch (e) {
+            _logger.warning("External API login failed for: $email - $e");
+            // Continue anyway, as local login succeeded
+          }
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  FitnessHomePage(userName: _userData?['name'] ?? 'Usuário'),
+              builder: (context) => FitnessHomePage(
+                userName: _userData?['name'] ?? 'Usuário',
+                userData: _userData!,
+              ),
             ),
           );
         } else {
@@ -65,12 +80,14 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
       } catch (e) {
+        if (!mounted) return;
         _logger.severe("Error during login: $e");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao conectar ao servidor')),
         );
       }
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Preencha todos os campos')));

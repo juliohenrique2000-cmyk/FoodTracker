@@ -1,25 +1,17 @@
-2025-09-20 07:19:24.795: [INFO] VisibilityChanged: 0
-2025-09-20 07:19:24.848: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.850: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.851: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.852: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.853: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.853: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.854: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.855: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.856: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.857: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.857: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 07:19:24.864: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 07:19:24.864: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 07:19:24.864: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 07:19:24.864: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2025-09-20 07:19:24.864: [INFO] OnDoneLoading sync enabled: 0
-2025-09-20 07:19:24.912: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
-2025-09-20 08:01:21.855: [INFO] VisibilityChanged: 0
-2025-09-20 08:01:21.916: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 08:01:21.916: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 08:01:21.916: [INFO] BookmarkNodeAdded, ABU: 0
-2025-09-20 08:01:21.916: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2025-09-20 08:01:21.916: [INFO] OnDoneLoading sync enabled: 0
-2025-09-20 08:01:21.918: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.524: [INFO] VisibilityChanged: 0
+2025-11-08 19:48:22.602: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.604: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.605: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.607: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.609: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.611: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.612: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.613: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.613: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.614: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.615: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 19:48:22.624: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-11-08 19:48:22.624: [INFO] OnDoneLoading sync enabled: 0
+2025-11-08 19:48:26.522: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-11-08 20:07:56.928: [INFO] VisibilityChanged: 0
+2025-11-08 20:07:57.803: [INFO] VisibilityChanged: 0
