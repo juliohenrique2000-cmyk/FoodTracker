@@ -57,7 +57,7 @@ app.delete('/activities/:id', async (req, res) => {
 // Register route
 app.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, photo, dateOfBirth } = req.body;
     const existingUser = await prisma.user.findUnique({
       where: { email: email }
     });
@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'User already exists' });
     }
     const user = await prisma.user.create({
-      data: { name, email, password }
+      data: { name, email, password, photo, dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null }
     });
     res.status(201).json({ message: 'User registered successfully', user: { id: user.id, email: user.email } });
   } catch (error) {
