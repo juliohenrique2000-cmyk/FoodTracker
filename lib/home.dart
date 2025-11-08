@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'receipts.dart';
 import 'progress.dart';
 import 'macronutrients_manager.dart';
+import 'pantry_screen.dart';
 
 class FitnessHomePage extends StatefulWidget {
   final String userName;
@@ -42,6 +43,8 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       case 2:
         return const ProgressScreen();
       case 3:
+        return const PantryScreen();
+      case 4:
         return const PlaceholderScreen(title: 'Perfil');
       default:
         return _buildHomeScreen();
@@ -129,7 +132,10 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF4CAF50), Color(0xFF81C784)],
+          colors: [
+            Color.fromARGB(255, 245, 0, 171),
+            Color.fromARGB(255, 25, 21, 255),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -574,6 +580,7 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
           icon: Icon(Icons.analytics),
           label: 'Progresso',
         ),
+        BottomNavigationBarItem(icon: Icon(Icons.kitchen), label: 'Despensa'),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
       ],
     );

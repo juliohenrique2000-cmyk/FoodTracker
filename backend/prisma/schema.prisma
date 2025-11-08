@@ -42,12 +42,41 @@ model User {
 
 model Recipes {
   id        Int  @id @default(autoincrement())
-  name      String 
+  name      String
   calories  Float
   fatsValue Float
   carboValue  Float
   protValue   Float
   prepareTime Int
+
+  @@map("recipes")
+}
+
+enum MealCategory {
+  BREAKFAST
+  LUNCH
+  DINNER
+}
+
+enum FoodType {
+  DRINK
+  PROTEIN
+  CARBOHYDRATE
+  FRUIT
+  GRAIN
+}
+
+model PantryItem {
+  id          Int          @id @default(autoincrement())
+  name        String
+  photo       String?      // URL or path to photo
+  categories  MealCategory[]
+  type        FoodType
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("pantry_items")
+}
   
 
   

@@ -90,7 +90,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// GET recipes route 
+// GET recipes route
 
 app.get('/recipes', async (req, res) => {
   try {
@@ -101,28 +101,90 @@ app.get('/recipes', async (req, res) => {
   }
 });
 
-app.put('/recipes', async (req, res) => {
-  try{
-    const recipes = await. prisma.recipes.update(){
+app.put('/recipes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const recipes = await prisma.recipes.update({
       where: { id: parseInt(id) },
       data: req.body
     });
-    }
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-  app.create('/recipes', async (req, res) => {
-  try{
-    const recipes = await. prisma.recipes.create(){
+// Pantry routes
+app.get('/pantry', async (req, res) => {
+  try {
+    const pantryItems = await prisma.pantryItem.findMany();
+    res.json(pantryItems);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/pantry', async (req, res) => {
+  try {
+    const { name, photo, categories, type } = req.body;
+    const pantryItem = await prisma.pantryItem.create({
       data: {
-        name: data.name
-        calories: data.calories
-        fatsValue: data.fatsValue
-        protValue: data.protValue
-        carbValue: data.carbValue
-        prepareTime: data.prepareTime
+        name,
+        photo,
+        categories,
+        type
       }
     });
-    }
-    
+    res.json(pantryItem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/pantry/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pantryItem = await prisma.pantryItem.update({
+      where: { id: parseInt(id) },
+      data: req.body
+    });
+    res.json(pantryItem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/pantry/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.pantryItem.delete({
+      where: { id: parseInt(id) }
+    });
+    res.json({ message: 'Pantry item deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/recipes', async (req, res) => {
+  try {
+    const { name, calories, fatsValue, carboValue, protValue, prepareTime } = req.body;
+    const recipes = await prisma.recipes.create({
+      data: {
+        name,
+        calories,
+        fatsValue,
+        carboValue,
+        protValue,
+        prepareTime
+      }
+    });
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 
