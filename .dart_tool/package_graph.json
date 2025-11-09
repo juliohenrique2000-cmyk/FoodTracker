@@ -1,10 +1,10 @@
 {
   "roots": [
-    "app_nutricao"
+    "foodtracker"
   ],
   "packages": [
     {
-      "name": "app_nutricao",
+      "name": "foodtracker",
       "version": "1.0.0+1",
       "dependencies": [
         "cupertino_icons",

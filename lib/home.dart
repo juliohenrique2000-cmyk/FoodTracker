@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'receipts.dart';
 import 'pantry_screen.dart';
 import 'profile_screen.dart';
+import 'recipe_api_service.dart';
 
 class FitnessHomePage extends StatefulWidget {
   final String userName;
@@ -19,11 +20,24 @@ class FitnessHomePage extends StatefulWidget {
 
 class _FitnessHomePageState extends State<FitnessHomePage> {
   int _currentIndex = 0;
+  int _waterCups = 0;
 
   @override
   void initState() {
     super.initState();
+    _loadWaterIntake();
     // _loadActivities(); // Commented out as progress is removed
+  }
+
+  Future<void> _loadWaterIntake() async {
+    try {
+      final cups = await RecipeApiService.getWaterIntake(widget.userData['id']);
+      setState(() {
+        _waterCups = cups;
+      });
+    } catch (e) {
+      print('Error loading water intake: $e');
+    }
   }
 
   // Future<void> _loadActivities() async {
@@ -43,7 +57,9 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       case 0:
         return _buildHomeScreen();
       case 1:
-        return const ReceiptsScreen();
+        return ReceiptsScreen(
+          onBackPressed: () => setState(() => _currentIndex = 0),
+        );
       case 2:
         return PantryScreen(userData: widget.userData);
       case 3:
@@ -196,28 +212,61 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
   }
 
   Widget _buildMainCards() {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: _buildFeatureCard(
-            icon: Icons.local_fire_department,
-            title: 'Calorias',
-            subtitle: '1,847 / 2,200',
-            color: Colors.orange,
-            onTap: () {},
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
+        Container(
+          width: double.infinity,
           child: _buildFeatureCard(
             icon: Icons.water_drop,
             title: 'Água',
-            subtitle: '6 / 8 copos',
+            subtitle: '$_waterCups / 10 copos',
             color: Colors.blue,
-            onTap: () {},
+            onTap: _showAddWaterDialog,
           ),
         ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: _waterCups / 10,
+          backgroundColor: Colors.grey[200],
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        ),
       ],
+    );
+  }
+
+  void _showAddWaterDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Adicionar 1 copo de água'),
+          content: const Text(
+            'Você gostaria de adicionar 1 copo à sua contagem diária de água?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  final newCups = await RecipeApiService.addWaterCup(
+                    widget.userData['id'],
+                  );
+                  setState(() {
+                    _waterCups = newCups;
+                  });
+                } catch (e) {
+                  print('Error adding water cup: $e');
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text('Adicionar'),
+            ),
+          ],
+        );
+      },
     );
   }
 

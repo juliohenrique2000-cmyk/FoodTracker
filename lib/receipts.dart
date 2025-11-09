@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'recipe_api_service.dart';
 
 class ReceiptsScreen extends StatefulWidget {
-  const ReceiptsScreen({super.key});
+  final VoidCallback? onBackPressed;
+
+  const ReceiptsScreen({super.key, this.onBackPressed});
 
   @override
   State<ReceiptsScreen> createState() => _ReceiptsScreenState();
@@ -10,16 +12,7 @@ class ReceiptsScreen extends StatefulWidget {
 
 class _ReceiptsScreenState extends State<ReceiptsScreen> {
   String selectedCategory = 'Todas';
-  final List<String> categories = [
-    'Todas',
-    'Café da Manhã',
-    'Almoço',
-    'Jantar',
-    'Lanches',
-    'Sobremesas',
-    'Vegetarianas',
-    'Low Carb',
-  ];
+  final List<String> categories = ['Todas', 'Refeições', 'Sobremesas'];
 
   List<Map<String, dynamic>> recipes = [];
   bool isLoading = true;
@@ -32,12 +25,19 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
 
   Future<void> _loadRecipes() async {
     try {
-      final fetchedRecipes = await RecipeApiService.fetchRecipes();
-      if (fetchedRecipes != null && fetchedRecipes.isNotEmpty) {
+      // Fetch recipes for 'doce' and 'salgado' types
+      final doceRecipes = await RecipeApiService.fetchRecipesByType('doce');
+      final salgadoRecipes = await RecipeApiService.fetchRecipesByType(
+        'salgado',
+      );
+
+      // Combine the results
+      final fetchedRecipes = [...doceRecipes, ...salgadoRecipes];
+
+      if (fetchedRecipes.isNotEmpty) {
         setState(() {
           recipes = fetchedRecipes
               .map((recipe) {
-                if (recipe == null) return null;
                 return {
                   'name': recipe['receita'] ?? 'Receita sem nome',
                   'category': _mapTypeToCategory(recipe['tipo']),
@@ -79,8 +79,6 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         return 'Sobremesas';
       case 'salgado':
         return 'Jantar';
-      case 'agridoce':
-        return 'Lanches';
       default:
         return 'Almoço';
     }
@@ -183,6 +181,15 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
     if (selectedCategory == 'Todas') {
       return recipes.isNotEmpty ? recipes : staticRecipes;
     }
+    if (selectedCategory == 'Refeições') {
+      return (recipes.isNotEmpty ? recipes : staticRecipes)
+          .where(
+            (recipe) =>
+                recipe['category'] == 'Almoço' ||
+                recipe['category'] == 'Jantar',
+          )
+          .toList();
+    }
     return (recipes.isNotEmpty ? recipes : staticRecipes)
         .where((recipe) => recipe['category'] == selectedCategory)
         .toList();
@@ -202,7 +209,13 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.grey),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (widget.onBackPressed != null) {
+              widget.onBackPressed!();
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
         ),
         actions: [
           IconButton(

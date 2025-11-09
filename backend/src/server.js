@@ -196,6 +196,86 @@ app.post('/recipes', async (req, res) => {
   }
 });
 
+// Water intake routes
+app.get('/water-intake', async (req, res) => {
+  try {
+    const userId = req.headers['user-id'];
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    let waterIntake = await prisma.waterIntake.findFirst({
+      where: {
+        userId: parseInt(userId),
+        date: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+
+    if (!waterIntake) {
+      waterIntake = await prisma.waterIntake.create({
+        data: {
+          userId: parseInt(userId),
+          cups: 0,
+          date: today
+        }
+      });
+    }
+
+    res.json({ cups: waterIntake.cups });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/water-intake', async (req, res) => {
+  try {
+    const userId = req.headers['user-id'];
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let waterIntake = await prisma.waterIntake.findFirst({
+      where: {
+        userId: parseInt(userId),
+        date: {
+          gte: today,
+          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
+        }
+      }
+    });
+
+    if (!waterIntake) {
+      waterIntake = await prisma.waterIntake.create({
+        data: {
+          userId: parseInt(userId),
+          cups: 1,
+          date: today
+        }
+      });
+    } else {
+      if (waterIntake.cups < 10) {
+        waterIntake = await prisma.waterIntake.update({
+          where: { id: waterIntake.id },
+          data: { cups: waterIntake.cups + 1 }
+        });
+      }
+    }
+
+    res.json({ cups: waterIntake.cups });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 

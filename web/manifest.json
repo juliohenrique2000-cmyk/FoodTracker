@@ -1,6 +1,6 @@
 {
-    "name": "app_nutricao",
-    "short_name": "app_nutricao",
+    "name": "FoodTracker",
+    "short_name": "FoodTracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

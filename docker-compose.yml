@@ -3,9 +3,9 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: app_nutricao_postgres
+    container_name: foodtracker_postgres
     environment:
-      POSTGRES_DB: app_nutricao
+      POSTGRES_DB: foodtracker
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:

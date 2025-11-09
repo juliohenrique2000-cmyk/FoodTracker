@@ -1,5 +1,5 @@
 {
-  "name": "app_nutricao_backend",
+  "name": "foodtracker_backend",
   "version": "1.0.0",
   "description": "Backend for nutrition app using Prisma and PostgreSQL",
   "main": "src/server.js",

@@ -1,4 +1,4 @@
-# app_nutricao
+# FoodTracker
 
 A Flutter app for nutrition tracking with a backend using Prisma ORM and PostgreSQL.
 

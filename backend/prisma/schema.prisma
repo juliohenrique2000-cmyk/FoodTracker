@@ -41,6 +41,7 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   pantryItems PantryItem[]
+  waterIntakes WaterIntake[]
   //contact[]
   }
 
@@ -83,6 +84,19 @@ model PantryItem {
   updatedAt   DateTime     @updatedAt
 
   @@map("pantry_items")
+}
+
+model WaterIntake {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cups      Int      @default(0)
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@map("water_intakes")
 }
   
 

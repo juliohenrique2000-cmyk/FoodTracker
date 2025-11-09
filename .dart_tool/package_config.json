@@ -422,7 +422,7 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "app_nutricao",
+      "name": "foodtracker",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.9"

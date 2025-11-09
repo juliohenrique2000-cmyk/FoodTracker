@@ -125,4 +125,47 @@ class RecipeApiService {
       throw Exception('Error fetching recipes by type: $e');
     }
   }
+
+  // Water intake methods
+  static Future<int> getWaterIntake(int userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/water-intake'),
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': userId.toString(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['cups'] ?? 0;
+      } else {
+        throw Exception('Failed to get water intake: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error getting water intake: $e');
+    }
+  }
+
+  static Future<int> addWaterCup(int userId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/water-intake'),
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': userId.toString(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['cups'] ?? 0;
+      } else {
+        throw Exception('Failed to add water cup: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error adding water cup: $e');
+    }
+  }
 }
