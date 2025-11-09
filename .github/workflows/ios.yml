@@ -1,15 +1,38 @@
-name: Build iOS FoodTracker app
+name: Build iOS App (Flutter)
 
-on: [push]
+on:
+  push:
+    branches: [ main ]  # ou altere para a branch que você usa
 
 jobs:
   build:
     runs-on: macos-latest
+
     steps:
+      # 1️⃣ Faz checkout do repositório
       - uses: actions/checkout@v3
+
+      # 2️⃣ Instala o Flutter (mesma versão que você usa localmente)
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.6'
-          dart-version: '3.9.2'
+          channel: 'stable'
+
+      # 3️⃣ Verifica a versão do Flutter e Dart
+      - run: flutter --version
+
+      # 4️⃣ Baixa dependências
       - run: flutter pub get
-      - run: flutter build ios --release
+
+      # 5️⃣ Verifica se está tudo certo
+      - run: flutter doctor -v
+
+      # 6️⃣ Faz o build do app iOS (sem assinatura)
+      - run: flutter build ios --release --no-codesign
+
+      # 7️⃣ Faz upload do resultado (.app / .ipa) como artefato
+      - name: Upload iOS Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/iphoneos
