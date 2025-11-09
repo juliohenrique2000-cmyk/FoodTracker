@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App de Nutrição',
+      title: 'FoodTracker',
       theme: ThemeData(primarySwatch: Colors.green),
       home: const LoginScreen(),
     );

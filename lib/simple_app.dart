@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App de Nutrição',
+      title: 'FoodTracker',
       theme: ThemeData(primarySwatch: Colors.green),
       home: const LoginScreen(),
     );
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email.isNotEmpty && senha.isNotEmpty) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const FitnessHomePage()),
+        MaterialPageRoute(builder: (context) => FitnessHomePage()),
       );
     } else {
       ScaffoldMessenger.of(
@@ -55,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text(
-              'Nutrição',
+              'FoodTracker',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
@@ -85,8 +86,116 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class FitnessHomePage extends StatelessWidget {
+class FitnessHomePage extends StatefulWidget {
   const FitnessHomePage({super.key});
+
+  @override
+  State<FitnessHomePage> createState() => _FitnessHomePageState();
+}
+
+class _FitnessHomePageState extends State<FitnessHomePage> {
+  late List<Map<String, dynamic>> selectedRecipes;
+
+  final List<Map<String, dynamic>> staticRecipes = [
+    {
+      'name': 'Salada Caesar Clássica',
+      'category': 'Almoço',
+      'calories': 320,
+      'time': 15,
+      'difficulty': 'Fácil',
+      'image': '🥗',
+      'rating': 4.8,
+      'ingredients': [
+        'Alface',
+        'Frango grelhado',
+        'Croutons',
+        'Queijo parmesão',
+        'Molho caesar',
+      ],
+      'description':
+          'Uma salada fresca e crocante com frango grelhado e molho caesar caseiro.',
+    },
+    {
+      'name': 'Frango Grelhado com Legumes',
+      'category': 'Jantar',
+      'calories': 450,
+      'time': 25,
+      'difficulty': 'Médio',
+      'image': '🍗',
+      'rating': 4.6,
+      'ingredients': [
+        'Peito de frango',
+        'Abobrinha',
+        'Berinjela',
+        'Pimentão',
+        'Ervas',
+      ],
+      'description':
+          'Frango suculento grelhado com legumes da estação, perfeito para uma refeição balanceada.',
+    },
+    {
+      'name': 'Panqueca de Aveia',
+      'category': 'Café da Manhã',
+      'calories': 280,
+      'time': 10,
+      'difficulty': 'Fácil',
+      'image': '🥞',
+      'rating': 4.9,
+      'ingredients': ['Aveia', 'Leite', 'Ovo', 'Banana', 'Canela'],
+      'description':
+          'Panquecas saudáveis e nutritivas para começar o dia com energia.',
+    },
+    {
+      'name': 'Sopa de Legumes',
+      'category': 'Almoço',
+      'calories': 180,
+      'time': 30,
+      'difficulty': 'Fácil',
+      'image': '🍲',
+      'rating': 4.4,
+      'ingredients': ['Cenoura', 'Batata', 'Abóbora', 'Cebola', 'Alho'],
+      'description':
+          'Sopa reconfortante e nutritiva, perfeita para dias frios.',
+    },
+    {
+      'name': 'Iogurte com Frutas',
+      'category': 'Lanches',
+      'calories': 150,
+      'time': 5,
+      'difficulty': 'Fácil',
+      'image': '🍓',
+      'rating': 4.7,
+      'ingredients': [
+        'Iogurte natural',
+        'Morangos',
+        'Banana',
+        'Granola',
+        'Mel',
+      ],
+      'description':
+          'Lanche rápido e saudável, rico em probióticos e vitaminas.',
+    },
+    {
+      'name': 'Quinoa com Vegetais',
+      'category': 'Vegetarianas',
+      'calories': 380,
+      'time': 20,
+      'difficulty': 'Fácil',
+      'image': '🥗',
+      'rating': 4.5,
+      'ingredients': ['Quinoa', 'Brócolis', 'Cenoura', 'Cebola roxa', 'Azeite'],
+      'description':
+          'Prato vegetariano completo e nutritivo, fonte de proteína vegetal.',
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedRecipes = List<Map<String, dynamic>>.from(staticRecipes)
+      ..shuffle(Random())
+      ..take(2).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -447,19 +556,37 @@ class FitnessHomePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _buildRecipeItem(
-            'Salada Caesar',
-            '320 cal • 15 min',
-            Icons.restaurant,
-            Colors.green,
-          ),
-          const SizedBox(height: 12),
-          _buildRecipeItem(
-            'Frango Grelhado',
-            '450 cal • 25 min',
-            Icons.set_meal,
-            Colors.orange,
-          ),
+          ...selectedRecipes.map((recipe) {
+            final icon = recipe['category'] == 'Café da Manhã'
+                ? Icons.free_breakfast
+                : recipe['category'] == 'Almoço'
+                ? Icons.restaurant
+                : recipe['category'] == 'Jantar'
+                ? Icons.set_meal
+                : recipe['category'] == 'Lanches'
+                ? Icons.restaurant_menu
+                : Icons.restaurant;
+            final color = recipe['category'] == 'Café da Manhã'
+                ? Colors.orange
+                : recipe['category'] == 'Almoço'
+                ? Colors.green
+                : recipe['category'] == 'Jantar'
+                ? Colors.blue
+                : recipe['category'] == 'Lanches'
+                ? Colors.purple
+                : Colors.grey;
+            return Column(
+              children: [
+                _buildRecipeItem(
+                  recipe['name'] as String,
+                  '${recipe['calories']} cal • ${recipe['time']} min',
+                  icon,
+                  color,
+                ),
+                const SizedBox(height: 12),
+              ],
+            );
+          }),
         ],
       ),
     );

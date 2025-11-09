@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main.dart'; // Para acessar LoginScreen
+import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
@@ -36,7 +37,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
-    // Limpar dados de sessão se necessário
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('password'); // Remove password to prevent auto-login
+
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const LoginScreen()),
       (Route<dynamic> route) => false,

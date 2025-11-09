@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 import 'registration_screen.dart';
 import 'recipe_api_service.dart';
@@ -35,6 +36,84 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _senhaController = TextEditingController();
   final Logger _logger = Logger('LoginScreen');
   Map<String, dynamic>? _userData;
+  bool _isLoading = true;
+  String? _savedEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAutoLogin();
+    _loadSavedEmail();
+  }
+
+  Future<void> _loadSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    if (email != null && mounted) {
+      setState(() {
+        _emailController.text = email;
+      });
+    }
+  }
+
+  Future<void> _checkAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    final password = prefs.getString('password');
+
+    if (email != null && password != null) {
+      // Attempt auto-login
+      try {
+        final response = await http.post(
+          Uri.parse('http://localhost:3000/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': email, 'password': password}),
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          _userData = responseData['user'];
+          _logger.info("Auto-login successful for: $email");
+
+          // Login to external recipe API
+          try {
+            await RecipeApiService.login(email, password);
+            _logger.info("External API auto-login successful for: $email");
+          } catch (e) {
+            _logger.warning("External API auto-login failed for: $email - $e");
+          }
+
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FitnessHomePage(
+                  userName: _userData?['name'] ?? 'Usuário',
+                  userData: _userData!,
+                ),
+              ),
+            );
+          }
+        } else {
+          // Auto-login failed, stay on login screen
+          _savedEmail = email; // Keep email for pre-filling
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      } catch (e) {
+        _logger.warning("Auto-login error: $e");
+        _savedEmail = email; // Keep email for pre-filling
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   Future<void> _fazerLogin() async {
     String email = _emailController.text;
@@ -54,6 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
           final responseData = jsonDecode(response.body);
           _userData = responseData['user'];
           _logger.info("Login successful for: $email");
+
+          // Save credentials for auto-login
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('email', email);
+          await prefs.setString('password', senha);
 
           // Login to external recipe API
           try {
@@ -96,6 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
@@ -104,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text(
-              'Nutrição',
+              'FoodTracker',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),

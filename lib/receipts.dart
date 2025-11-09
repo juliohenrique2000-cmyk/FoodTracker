@@ -3,8 +3,9 @@ import 'recipe_api_service.dart';
 
 class ReceiptsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
+  final Map<String, dynamic>? selectedRecipe;
 
-  const ReceiptsScreen({super.key, this.onBackPressed});
+  const ReceiptsScreen({super.key, this.onBackPressed, this.selectedRecipe});
 
   @override
   State<ReceiptsScreen> createState() => _ReceiptsScreenState();
@@ -21,6 +22,11 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
   void initState() {
     super.initState();
     _loadRecipes();
+    if (widget.selectedRecipe != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showRecipeDetails(widget.selectedRecipe!);
+      });
+    }
   }
 
   Future<void> _loadRecipes() async {
@@ -432,6 +438,7 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      isDismissible: true,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         maxChildSize: 0.9,
