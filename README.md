@@ -40,7 +40,7 @@ A Flutter app for nutrition tracking with a backend using Prisma ORM and Postgre
    npm run dev
    ```
 
-The backend will be running on http://localhost:3000
+The backend is deployed on Azure at https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net
 
 ## Flutter App Setup
 

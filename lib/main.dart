@@ -37,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final Logger _logger = Logger('LoginScreen');
   Map<String, dynamic>? _userData;
   bool _isLoading = true;
-  String? _savedEmail;
 
   @override
   void initState() {
@@ -65,7 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
       // Attempt auto-login
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:3000/login'),
+          Uri.parse(
+            'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/login',
+          ),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'password': password}),
         );
@@ -96,14 +97,14 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         } else {
           // Auto-login failed, stay on login screen
-          _savedEmail = email; // Keep email for pre-filling
+          // Keep email for pre-filling
           setState(() {
             _isLoading = false;
           });
         }
       } catch (e) {
         _logger.warning("Auto-login error: $e");
-        _savedEmail = email; // Keep email for pre-filling
+        // Keep email for pre-filling
         setState(() {
           _isLoading = false;
         });
@@ -122,7 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email.isNotEmpty && senha.isNotEmpty) {
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:3000/login'),
+          Uri.parse(
+            'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/login',
+          ),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'password': senha}),
         );
@@ -149,6 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
 
           Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
             context,
             MaterialPageRoute(
               builder: (context) => FitnessHomePage(

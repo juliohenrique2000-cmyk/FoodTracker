@@ -75,7 +75,9 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _loadPantryItems() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:3000/pantry'),
+        Uri.parse(
+          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry',
+        ),
         headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;
@@ -102,7 +104,9 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _addPantryItem(PantryItem item) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/pantry'),
+        Uri.parse(
+          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry',
+        ),
         headers: {
           'Content-Type': 'application/json',
           'user-id': widget.userData['id'].toString(),
@@ -129,7 +133,9 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _editPantryItem(PantryItem item) async {
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:3000/pantry/${item.id}'),
+        Uri.parse(
+          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry/${item.id}',
+        ),
         headers: {
           'Content-Type': 'application/json',
           'user-id': widget.userData['id'].toString(),
@@ -312,7 +318,9 @@ class _PantryScreenState extends State<PantryScreen> {
 
     try {
       final response = await http.delete(
-        Uri.parse('http://localhost:3000/pantry/${item.id}'),
+        Uri.parse(
+          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry/${item.id}',
+        ),
         headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;
