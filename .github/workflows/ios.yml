@@ -1,0 +1,14 @@
+name: Build iOS FoodTracker app
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+      - run: flutter pub get
+      - run: flutter build ios --release
