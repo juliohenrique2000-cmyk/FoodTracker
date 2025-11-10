@@ -231,6 +231,21 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: const Text('Cadastre-se'),
             ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FitnessHomePage(
+                      userName: 'Convidado',
+                      userData: {},
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Acessar sem cadastro'),
+            ),
           ],
         ),
       ),

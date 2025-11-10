@@ -1,6 +1,0 @@
-- [x] Update baseUrl in lib/api_service.dart to Azure backend
-- [x] Update water-intake URLs in lib/recipe_api_service.dart to Azure backend
-- [x] Update register URL in lib/registration_screen.dart to Azure backend
-- [x] Update pantry URLs in lib/pantry_screen.dart to Azure backend
-- [x] Update login URLs in lib/main.dart to Azure backend
-- [x] Update unused ApiService class in lib/main.dart to Azure backend

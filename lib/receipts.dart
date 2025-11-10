@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:share_plus/share_plus.dart';
 import 'recipe_api_service.dart';
 
 class ReceiptsScreen extends StatefulWidget {
@@ -14,9 +17,12 @@ class ReceiptsScreen extends StatefulWidget {
 class _ReceiptsScreenState extends State<ReceiptsScreen> {
   String selectedCategory = 'Todas';
   final List<String> categories = ['Todas', 'Refeições', 'Sobremesas'];
+  String searchQuery = '';
 
   List<Map<String, dynamic>> recipes = [];
   bool isLoading = true;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -184,21 +190,35 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
   ];
 
   List<Map<String, dynamic>> get filteredRecipes {
-    if (selectedCategory == 'Todas') {
-      return recipes.isNotEmpty ? recipes : staticRecipes;
+    final baseRecipes = recipes.isNotEmpty ? recipes : staticRecipes;
+    final categoryFiltered = selectedCategory == 'Todas'
+        ? baseRecipes
+        : selectedCategory == 'Refeições'
+        ? baseRecipes
+              .where(
+                (recipe) =>
+                    recipe['category'] == 'Almoço' ||
+                    recipe['category'] == 'Jantar',
+              )
+              .toList()
+        : baseRecipes
+              .where((recipe) => recipe['category'] == selectedCategory)
+              .toList();
+
+    if (searchQuery.isEmpty) {
+      return categoryFiltered;
     }
-    if (selectedCategory == 'Refeições') {
-      return (recipes.isNotEmpty ? recipes : staticRecipes)
-          .where(
-            (recipe) =>
-                recipe['category'] == 'Almoço' ||
-                recipe['category'] == 'Jantar',
-          )
-          .toList();
-    }
-    return (recipes.isNotEmpty ? recipes : staticRecipes)
-        .where((recipe) => recipe['category'] == selectedCategory)
-        .toList();
+
+    return categoryFiltered.where((recipe) {
+      final name = recipe['name'].toString().toLowerCase();
+      final ingredients =
+          (recipe['ingredients'] as List<dynamic>?)
+              ?.map((e) => e.toString().toLowerCase())
+              .join(' ') ??
+          '';
+      final query = searchQuery.toLowerCase();
+      return name.contains(query) || ingredients.contains(query);
+    }).toList();
   }
 
   @override
@@ -225,15 +245,63 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.grey),
-            onPressed: () {},
+            icon: const Icon(Icons.add, color: Colors.grey),
+            onPressed: () => _showCreateRecipeDialog(context),
           ),
         ],
       ),
       body: Column(
         children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Buscar receitas...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFF4CAF50)),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+          ),
+
           // Categories Filter
           _buildCategoriesFilter(),
+
+          // Create Recipe Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ElevatedButton.icon(
+              onPressed: () => _showCreateRecipeDialog(context),
+              icon: const Icon(Icons.add),
+              label: const Text('Criar Nova Receita'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4CAF50),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
 
           // Recipes List
           Expanded(
@@ -331,10 +399,17 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(
-                    recipe['image'],
-                    style: const TextStyle(fontSize: 30),
-                  ),
+                  child: recipe['image'].startsWith('/')
+                      ? Image.file(
+                          File(recipe['image']),
+                          fit: BoxFit.cover,
+                          width: 60,
+                          height: 60,
+                        )
+                      : Text(
+                          recipe['image'],
+                          style: const TextStyle(fontSize: 30),
+                        ),
                 ),
               ),
 
@@ -465,10 +540,17 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Center(
-                      child: Text(
-                        recipe['image'],
-                        style: const TextStyle(fontSize: 40),
-                      ),
+                      child: recipe['image'].startsWith('/')
+                          ? Image.file(
+                              File(recipe['image']),
+                              fit: BoxFit.cover,
+                              width: 80,
+                              height: 80,
+                            )
+                          : Text(
+                              recipe['image'],
+                              style: const TextStyle(fontSize: 40),
+                            ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -614,9 +696,9 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.play_arrow),
-                      label: const Text('Preparar'),
+                      onPressed: () => _shareRecipe(recipe),
+                      icon: const Icon(Icons.share),
+                      label: const Text('Compartilhar'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4CAF50),
                         foregroundColor: Colors.white,
@@ -633,6 +715,177 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         ),
       ),
     );
+  }
+
+  void _showCreateRecipeDialog(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController ingredientsController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
+    String selectedCategory = 'Almoço';
+    File? selectedImage;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Criar Nova Receita'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Image Picker Button
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    final XFile? image = await _picker.pickImage(
+                      source: ImageSource.camera,
+                    );
+                    if (image != null) {
+                      setState(() {
+                        selectedImage = File(image.path);
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.camera_alt),
+                  label: const Text('Tirar Foto'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4CAF50),
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                if (selectedImage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Image.file(
+                      selectedImage!,
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome da Receita',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedCategory,
+                  decoration: const InputDecoration(
+                    labelText: 'Categoria',
+                    border: OutlineInputBorder(),
+                  ),
+                  items:
+                      [
+                            'Almoço',
+                            'Jantar',
+                            'Sobremesas',
+                            'Café da Manhã',
+                            'Lanches',
+                            'Vegetarianas',
+                          ]
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (value) {
+                    selectedCategory = value!;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: ingredientsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Ingredientes (separados por vírgula)',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Modo de Preparo',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 5,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (nameController.text.isNotEmpty &&
+                    ingredientsController.text.isNotEmpty &&
+                    descriptionController.text.isNotEmpty) {
+                  final newRecipe = {
+                    'name': nameController.text,
+                    'category': selectedCategory,
+                    'calories': 300,
+                    'time': 30,
+                    'difficulty': 'Fácil',
+                    'image': selectedImage != null
+                        ? selectedImage!.path
+                        : '🍽️',
+                    'rating': 4.5,
+                    'ingredients': ingredientsController.text.split(', '),
+                    'description': descriptionController.text,
+                  };
+
+                  setState(() {
+                    recipes.add(newRecipe);
+                  });
+
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Receita criada com sucesso!'),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Por favor, preencha todos os campos.'),
+                    ),
+                  );
+                }
+              },
+              child: const Text('Criar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _shareRecipe(Map<String, dynamic> recipe) {
+    final String recipeText =
+        '''
+${recipe['name']}
+
+Categoria: ${recipe['category']}
+Tempo: ${recipe['time']} min
+Dificuldade: ${recipe['difficulty']}
+Calorias: ${recipe['calories']} kcal
+
+Ingredientes:
+${recipe['ingredients'].join('\n')}
+
+Modo de Preparo:
+${recipe['description']}
+    ''';
+
+    Share.share(recipeText, subject: 'Receita: ${recipe['name']}');
   }
 
   Widget _buildDetailCard(
