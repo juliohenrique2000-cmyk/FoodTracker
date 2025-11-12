@@ -3,6 +3,8 @@ import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'home.dart';
 import 'registration_screen.dart';
 import 'recipe_api_service.dart';
@@ -17,8 +19,38 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tela de Login',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      title: 'FoodTracker',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF4CAF50),
+          brightness: Brightness.light,
+        ),
+        fontFamily: GoogleFonts.inter().fontFamily,
+        cardTheme: CardThemeData(
+          elevation: 4,
+          shadowColor: const Color(0x1F000000),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 2,
+            shadowColor: Colors.black.withOpacity(0.1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: Colors.grey[50],
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
       home: const LoginScreen(),
     );
   }
@@ -181,68 +213,109 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.primary,
+          ).animate().fadeIn(duration: 500.ms).scale(),
+        ),
+      );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text(
-              'FoodTracker',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 32),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _senhaController,
-              decoration: const InputDecoration(
-                labelText: 'Senha',
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(onPressed: _fazerLogin, child: const Text('Entrar')),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RegistrationScreen(),
-                  ),
-                );
-              },
-              child: const Text('Cadastre-se'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FitnessHomePage(
-                      userName: 'Convidado',
-                      userData: {},
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+              // Logo/Title with animation
+              Text(
+                '🍎 FoodTracker',
+                style: GoogleFonts.inter(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.3, end: 0),
+              const SizedBox(height: 8),
+              Text(
+                    'Sua jornada nutricional começa aqui',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                  ),
-                );
-              },
-              child: const Text('Acessar sem cadastro'),
-            ),
-          ],
+                  )
+                  .animate()
+                  .fadeIn(duration: 800.ms, delay: 200.ms)
+                  .slideY(begin: 0.3, end: 0),
+              const SizedBox(height: 48),
+              // Login form with staggered animations
+              TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.email_outlined),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  )
+                  .animate()
+                  .fadeIn(duration: 600.ms, delay: 400.ms)
+                  .slideX(begin: -0.2, end: 0),
+              const SizedBox(height: 16),
+              TextField(
+                    controller: _senhaController,
+                    decoration: const InputDecoration(
+                      labelText: 'Senha',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
+                    obscureText: true,
+                  )
+                  .animate()
+                  .fadeIn(duration: 600.ms, delay: 500.ms)
+                  .slideX(begin: 0.2, end: 0),
+              const SizedBox(height: 32),
+              // Buttons with animations
+              SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _fazerLogin,
+                      child: const Text('Entrar'),
+                    ),
+                  )
+                  .animate()
+                  .fadeIn(duration: 600.ms, delay: 600.ms)
+                  .scale(begin: const Offset(0.8, 0.8)),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegistrationScreen(),
+                    ),
+                  );
+                },
+                child: const Text('Cadastre-se'),
+              ).animate().fadeIn(duration: 600.ms, delay: 700.ms),
+              const SizedBox(height: 16),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FitnessHomePage(
+                        userName: 'Convidado',
+                        userData: {},
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Acessar sem cadastro'),
+              ).animate().fadeIn(duration: 600.ms, delay: 800.ms),
+            ],
+          ),
         ),
       ),
     );

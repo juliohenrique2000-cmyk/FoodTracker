@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'receipts.dart';
 import 'pantry_screen.dart';
 import 'profile_screen.dart';
@@ -149,17 +151,14 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 245, 0, 171),
-            Color.fromARGB(255, 25, 21, 255),
-          ],
+          colors: [Color(0xFF4CAF50), Color(0xFF81C784)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.withAlpha(77),
+            color: Colors.green.withOpacity(0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -168,67 +167,83 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.white,
-            backgroundImage:
-                widget.userData['photo'] != null &&
-                    widget.userData['photo'].isNotEmpty
-                ? NetworkImage(widget.userData['photo'])
-                : null,
-            child:
-                widget.userData['photo'] == null ||
-                    widget.userData['photo'].isEmpty
-                ? const Icon(Icons.person, size: 30, color: Color(0xFF4CAF50))
-                : null,
-          ),
+                radius: 30,
+                backgroundColor: Colors.white,
+                backgroundImage:
+                    widget.userData['photo'] != null &&
+                        widget.userData['photo'].isNotEmpty
+                    ? NetworkImage(widget.userData['photo'])
+                    : null,
+                child:
+                    widget.userData['photo'] == null ||
+                        widget.userData['photo'].isEmpty
+                    ? const Icon(
+                        Icons.person,
+                        size: 30,
+                        color: Color(0xFF4CAF50),
+                      )
+                    : null,
+              )
+              .animate()
+              .scale(begin: const Offset(0.8, 0.8))
+              .fadeIn(duration: 600.ms),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  greeting,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const Text(
-                  'Bem-vindo ao seu app de nutrição!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                      greeting,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(duration: 800.ms, delay: 200.ms)
+                    .slideX(begin: -0.2, end: 0),
+                Text(
+                      'Bem-vindo ao seu app de nutrição!',
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(duration: 800.ms, delay: 400.ms)
+                    .slideX(begin: -0.2, end: 0),
               ],
             ),
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 1000.ms).slideY(begin: -0.2, end: 0);
   }
 
   Widget _buildMainCards() {
     return Column(
       children: [
         SizedBox(
-          width: double.infinity,
-          child: _buildFeatureCard(
-            icon: Icons.water_drop,
-            title: 'Água',
-            subtitle: '$_waterCups / 10 copos',
-            color: Colors.blue,
-            onTap: _showAddWaterDialog,
-          ),
-        ),
+              width: double.infinity,
+              child: _buildFeatureCard(
+                icon: Icons.water_drop,
+                title: 'Água',
+                subtitle: '$_waterCups / 10 copos',
+                color: Colors.blue,
+                onTap: _showAddWaterDialog,
+              ),
+            )
+            .animate()
+            .fadeIn(duration: 600.ms, delay: 800.ms)
+            .slideY(begin: 0.2, end: 0),
         const SizedBox(height: 12),
         LinearProgressIndicator(
           value: _waterCups / 10,
           backgroundColor: Colors.grey[200],
           valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-        ),
+        ).animate().fadeIn(duration: 600.ms, delay: 900.ms),
       ],
     );
   }
@@ -330,19 +345,25 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
-        ),
+        ).animate().fadeIn(duration: 600.ms, delay: 1000.ms),
         const SizedBox(height: 12),
         _buildTipCard(
-          '🍎',
-          'Coma uma maçã por dia!',
-          'Frutas são essenciais para uma dieta equilibrada.',
-        ),
+              '🍎',
+              'Coma uma maçã por dia!',
+              'Frutas são essenciais para uma dieta equilibrada.',
+            )
+            .animate()
+            .fadeIn(duration: 600.ms, delay: 1100.ms)
+            .slideX(begin: -0.1, end: 0),
         const SizedBox(height: 8),
         _buildTipCard(
-          '💧',
-          'Beba pelo menos 2 litros de água por dia',
-          'A hidratação adequada melhora o metabolismo.',
-        ),
+              '💧',
+              'Beba pelo menos 2 litros de água por dia',
+              'A hidratação adequada melhora o metabolismo.',
+            )
+            .animate()
+            .fadeIn(duration: 600.ms, delay: 1200.ms)
+            .slideX(begin: 0.1, end: 0),
       ],
     );
   }
@@ -386,48 +407,51 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
 
   Widget _buildTodayRecipes() {
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withAlpha(25),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withAlpha(25),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Receitas do Dia',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Receitas do Dia',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ).animate().fadeIn(duration: 600.ms, delay: 1300.ms),
+              const SizedBox(height: 16),
+              if (_randomRecipes.isEmpty)
+                const Center(child: CircularProgressIndicator())
+              else
+                ..._randomRecipes.map((recipe) {
+                  final ingredients = recipe['ingredientes'] ?? '';
+                  final truncatedIngredients = ingredients.length > 50
+                      ? '${ingredients.substring(0, 50)}...'
+                      : ingredients;
+                  return Column(
+                    children: [
+                      _buildRecipeItem(recipe, truncatedIngredients),
+                      const SizedBox(height: 12),
+                    ],
+                  );
+                }),
+            ],
           ),
-          const SizedBox(height: 16),
-          if (_randomRecipes.isEmpty)
-            const Center(child: CircularProgressIndicator())
-          else
-            ..._randomRecipes.map((recipe) {
-              final ingredients = recipe['ingredientes'] ?? '';
-              final truncatedIngredients = ingredients.length > 50
-                  ? '${ingredients.substring(0, 50)}...'
-                  : ingredients;
-              return Column(
-                children: [
-                  _buildRecipeItem(recipe, truncatedIngredients),
-                  const SizedBox(height: 12),
-                ],
-              );
-            }),
-        ],
-      ),
-    );
+        )
+        .animate()
+        .fadeIn(duration: 600.ms, delay: 1400.ms)
+        .slideY(begin: 0.1, end: 0);
   }
 
   Widget _buildRecipeItem(Map<String, dynamic> recipe, String details) {

@@ -1,10 +1,17 @@
-# TODO: Implement Profile Photo Change Feature
+# UI/UX Modernization Plan for Flutter Nutrition App
 
-- [x] Add necessary imports (image_picker) to lib/profile_screen.dart
-- [x] Wrap CircleAvatar with GestureDetector and add onTap handler
-- [x] Implement AlertDialog in onTap to ask if user wants to change photo ("Sim" / "Não")
-- [x] If "Sim", show image picker dialog for camera or gallery selection
-- [x] Pick image, update _userData['photo'] with image path, save to SharedPreferences
-- [x] Refresh UI with setState to display new photo
-- [x] Verify camera and storage permissions in AndroidManifest.xml and Info.plist
-- [x] Test the feature on a device
+## Overview
+Modernize the Flutter nutrition app to 2025 standards: Material 3, dynamic colors, soft shadows, rounded corners, micro-interactions, modern typography, clean layout, responsive design.
+
+## Steps
+1. Update pubspec.yaml with new dependencies (google_fonts, flutter_animate, animations).
+2. Update main.dart to use Material 3 theme with custom color scheme.
+3. Redesign login screen in main.dart with modern UI elements.
+4. Redesign home screen in home.dart with new components, animations, and layout.
+5. Update receipts.dart for consistency.
+6. Update pantry_screen.dart for consistency.
+7. Update profile_screen.dart for consistency.
+8. Update credits_screen.dart for consistency.
+9. Ensure responsiveness across all screens.
+10. Test micro-interactions and animations.
+11. Run flutter pub get and test the app.

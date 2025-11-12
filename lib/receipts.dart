@@ -17,10 +17,16 @@ class ReceiptsScreen extends StatefulWidget {
 
 class _ReceiptsScreenState extends State<ReceiptsScreen> {
   String selectedCategory = 'Todas';
-  final List<String> categories = ['Todas', 'Refeições', 'Sobremesas'];
+  final List<String> categories = [
+    'Todas',
+    'Refeições',
+    'Sobremesas',
+    'Favoritos',
+  ];
   String searchQuery = '';
 
   List<Map<String, dynamic>> recipes = [];
+  List<Map<String, dynamic>> favoriteRecipes = [];
   bool isLoading = true;
 
   final ImagePicker _picker = ImagePicker();
@@ -202,6 +208,8 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
                     recipe['category'] == 'Jantar',
               )
               .toList()
+        : selectedCategory == 'Favoritos'
+        ? favoriteRecipes
         : baseRecipes
               .where((recipe) => recipe['category'] == selectedCategory)
               .toList();
@@ -526,192 +534,234 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.all(20),
+          child: Column(
             children: [
-              // Header
-              Row(
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: _getCategoryColor(
-                        recipe['category'],
-                      ).withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: recipe['image'].startsWith('/')
-                          ? Image.file(
-                              File(recipe['image']),
-                              fit: BoxFit.cover,
-                              width: 80,
-                              height: 80,
-                            )
-                          : Text(
-                              recipe['image'],
-                              style: const TextStyle(fontSize: 40),
-                            ),
-                    ),
+              // Tap to close area at the top
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
+                  height: 40,
+                  color: Colors.transparent,
+                  child: const Center(
+                    child: Icon(Icons.keyboard_arrow_down, color: Colors.grey),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    // Header
+                    Row(
                       children: [
-                        Text(
-                          recipe['name'],
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: _getCategoryColor(
+                              recipe['category'],
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Center(
+                            child: recipe['image'].startsWith('/')
+                                ? Image.file(
+                                    File(recipe['image']),
+                                    fit: BoxFit.cover,
+                                    width: 80,
+                                    height: 80,
+                                  )
+                                : Text(
+                                    recipe['image'],
+                                    style: const TextStyle(fontSize: 40),
+                                  ),
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          recipe['category'],
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: _getCategoryColor(recipe['category']),
-                            fontWeight: FontWeight.w500,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                recipe['name'],
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                recipe['category'],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: _getCategoryColor(recipe['category']),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-              // Quick Info
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildDetailCard(
-                      Icons.local_fire_department,
-                      'Calorias',
-                      '${recipe['calories']} kcal',
-                      Colors.orange,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildDetailCard(
-                      Icons.access_time,
-                      'Tempo',
-                      '${recipe['time']} min',
-                      Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildDetailCard(
-                      Icons.trending_up,
-                      'Dificuldade',
-                      recipe['difficulty'],
-                      Colors.green,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Description
-              const Text(
-                'Descrição',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                recipe['description'],
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                  height: 1.5,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Ingredients
-              const Text(
-                'Ingredientes',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 8),
-              ...recipe['ingredients']
-                  .map<Widget>(
-                    (ingredient) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.check_circle,
-                            size: 16,
-                            color: Color(0xFF4CAF50),
+                    // Quick Info
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildDetailCard(
+                            Icons.local_fire_department,
+                            'Calorias',
+                            '${recipe['calories']} kcal',
+                            Colors.orange,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            ingredient,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[700],
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildDetailCard(
+                            Icons.access_time,
+                            'Tempo',
+                            '${recipe['time']} min',
+                            Colors.blue,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildDetailCard(
+                            Icons.trending_up,
+                            'Dificuldade',
+                            recipe['difficulty'],
+                            Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Description
+                    const Text(
+                      'Descrição',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      recipe['description'],
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                        height: 1.5,
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Ingredients
+                    const Text(
+                      'Ingredientes',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ...recipe['ingredients']
+                        .map<Widget>(
+                          (ingredient) => Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.check_circle,
+                                  size: 16,
+                                  color: Color(0xFF4CAF50),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  ingredient,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
+                        )
+                        .toList(),
 
-              const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite_border),
-                      label: const Text('Favoritar'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF4CAF50),
-                        side: const BorderSide(color: Color(0xFF4CAF50)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    // Action Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: StatefulBuilder(
+                            builder: (context, setState) {
+                              final isFavorite = favoriteRecipes.any(
+                                (fav) => fav['name'] == recipe['name'],
+                              );
+                              return ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    if (isFavorite) {
+                                      favoriteRecipes.removeWhere(
+                                        (fav) => fav['name'] == recipe['name'],
+                                      );
+                                    } else {
+                                      favoriteRecipes.add(recipe);
+                                    }
+                                  });
+                                  // Update the main state
+                                  this.setState(() {});
+                                },
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                ),
+                                label: const Text('Favoritar'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: const Color(0xFF4CAF50),
+                                  side: const BorderSide(
+                                    color: Color(0xFF4CAF50),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _shareRecipe(recipe),
-                      icon: const Icon(Icons.share),
-                      label: const Text('Compartilhar'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _shareRecipe(recipe),
+                            icon: const Icon(Icons.share),
+                            label: const Text('Compartilhar'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF4CAF50),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
