@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'main.dart';
 import 'credits_screen.dart';
+import 'home.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
@@ -14,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, dynamic> _userData;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -26,8 +30,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       // Aqui você pode implementar uma chamada para buscar dados completos do usuário
       // Por enquanto, usamos os dados já disponíveis
+      final prefs = await SharedPreferences.getInstance();
+      final savedPhoto = prefs.getString('profile_photo');
+      Map<String, dynamic> userData = Map.from(widget.userData);
+      if (savedPhoto != null) {
+        try {
+          if (File(savedPhoto).existsSync()) {
+            userData['photo'] = savedPhoto;
+          }
+        } catch (e) {
+          // File doesn't exist or can't be accessed, ignore
+        }
+      }
       setState(() {
-        _userData = widget.userData;
+        _userData = userData;
       });
     } catch (e) {
       if (!mounted) return;
@@ -45,6 +61,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
       MaterialPageRoute(builder: (context) => const LoginScreen()),
       (Route<dynamic> route) => false,
     );
+  }
+
+  Future<void> _changeProfilePhoto() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Trocar Foto de Perfil'),
+          content: const Text('Você gostaria de trocar a foto de perfil?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Não'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Sim'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result == true) {
+      await _pickImage();
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final source = await showDialog<ImageSource>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Selecionar Imagem'),
+          content: const Text('Escolha a fonte da imagem:'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(ImageSource.camera),
+              child: const Text('Câmera'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(ImageSource.gallery),
+              child: const Text('Galeria'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (source != null) {
+      try {
+        final pickedFile = await _picker.pickImage(source: source);
+        if (pickedFile != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('profile_photo', pickedFile.path);
+          setState(() {
+            _userData['photo'] = pickedFile.path;
+          });
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Foto de perfil atualizada!')),
+          );
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao selecionar imagem: $e')),
+        );
+      }
+    }
   }
 
   String _formatDate(String? dateString) {
@@ -71,7 +157,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.grey),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) =>
+                    const FitnessHomePage(userName: 'Usuário', userData: {}),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -80,16 +174,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Foto de perfil
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.grey[300],
-              backgroundImage:
-                  _userData['photo'] != null && _userData['photo'].isNotEmpty
-                  ? NetworkImage(_userData['photo'])
-                  : null,
-              child: _userData['photo'] == null || _userData['photo'].isEmpty
-                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
-                  : null,
+            GestureDetector(
+              onTap: _changeProfilePhoto,
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.grey[300],
+                backgroundImage:
+                    _userData['photo'] != null && _userData['photo'].isNotEmpty
+                    ? (_userData['photo'].startsWith('http') ||
+                              _userData['photo'].startsWith('blob:')
+                          ? NetworkImage(_userData['photo'])
+                          : FileImage(File(_userData['photo'])))
+                    : null,
+                child: _userData['photo'] == null || _userData['photo'].isEmpty
+                    ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                    : null,
+              ),
             ),
             const SizedBox(height: 16),
 

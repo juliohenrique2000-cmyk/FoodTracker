@@ -64,9 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Attempt auto-login
       try {
         final response = await http.post(
-          Uri.parse(
-            'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/login',
-          ),
+          Uri.parse('http://localhost:3000/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'password': password}),
         );
@@ -123,9 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (email.isNotEmpty && senha.isNotEmpty) {
       try {
         final response = await http.post(
-          Uri.parse(
-            'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/login',
-          ),
+          Uri.parse('http://localhost:3000/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'password': senha}),
         );

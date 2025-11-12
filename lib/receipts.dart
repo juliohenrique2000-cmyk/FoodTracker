@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:share_plus/share_plus.dart';
 import 'recipe_api_service.dart';
+import 'home.dart';
 
 class ReceiptsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -236,11 +237,13 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.grey),
           onPressed: () {
-            if (widget.onBackPressed != null) {
-              widget.onBackPressed!();
-            } else {
-              Navigator.of(context).pop();
-            }
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) =>
+                    const FitnessHomePage(userName: 'Usuário', userData: {}),
+              ),
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         actions: [

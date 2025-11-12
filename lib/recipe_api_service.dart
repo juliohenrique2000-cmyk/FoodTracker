@@ -130,9 +130,7 @@ class RecipeApiService {
   static Future<int> getWaterIntake(int userId) async {
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/water-intake',
-        ),
+        Uri.parse('http://localhost:3000/water-intake'),
         headers: {
           'Content-Type': 'application/json',
           'user-id': userId.toString(),
@@ -153,9 +151,7 @@ class RecipeApiService {
   static Future<int> addWaterCup(int userId) async {
     try {
       final response = await http.post(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/water-intake',
-        ),
+        Uri.parse('http://localhost:3000/water-intake'),
         headers: {
           'Content-Type': 'application/json',
           'user-id': userId.toString(),

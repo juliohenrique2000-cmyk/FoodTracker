@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
+import 'home.dart';
 
 enum MealCategory { breakfast, lunch, dinner }
 
@@ -75,9 +76,7 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _loadPantryItems() async {
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry',
-        ),
+        Uri.parse('http://localhost:3000/pantry'),
         headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;
@@ -104,9 +103,7 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _addPantryItem(PantryItem item) async {
     try {
       final response = await http.post(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry',
-        ),
+        Uri.parse('http://localhost:3000/pantry'),
         headers: {
           'Content-Type': 'application/json',
           'user-id': widget.userData['id'].toString(),
@@ -133,9 +130,7 @@ class _PantryScreenState extends State<PantryScreen> {
   Future<void> _editPantryItem(PantryItem item) async {
     try {
       final response = await http.put(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry/${item.id}',
-        ),
+        Uri.parse('http://localhost:3000/pantry/${item.id}'),
         headers: {
           'Content-Type': 'application/json',
           'user-id': widget.userData['id'].toString(),
@@ -188,7 +183,15 @@ class _PantryScreenState extends State<PantryScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.grey),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) =>
+                    const FitnessHomePage(userName: 'Usuário', userData: {}),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -318,9 +321,7 @@ class _PantryScreenState extends State<PantryScreen> {
 
     try {
       final response = await http.delete(
-        Uri.parse(
-          'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net/pantry/${item.id}',
-        ),
+        Uri.parse('http://localhost:3000/pantry/${item.id}'),
         headers: {'user-id': widget.userData['id'].toString()},
       );
       if (!mounted) return;

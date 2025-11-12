@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'database_service.dart'; // For Activity class
 
 class ApiService {
-  static const String baseUrl =
-      'https://backendfoodtracker-dgeyehh7afe3cjc5.brazilsouth-01.azurewebsites.net';
+  static const String baseUrl = 'http://localhost:3000';
 
   static Future<List<Activity>> fetchActivities() async {
     try {

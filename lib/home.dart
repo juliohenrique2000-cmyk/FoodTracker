@@ -127,8 +127,6 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
               const SizedBox(height: 24),
               _buildMainCards(),
               const SizedBox(height: 24),
-              _buildDailyProgress(),
-              const SizedBox(height: 24),
               _buildQuickTips(),
               const SizedBox(height: 24),
               _buildTodayRecipes(),
@@ -318,73 +316,6 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDailyProgress() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withAlpha(25),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Progresso Diário',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 16),
-          _buildProgressItem('Proteínas', 0.7, Colors.green),
-          const SizedBox(height: 12),
-          _buildProgressItem('Carboidratos', 0.5, Colors.orange),
-          const SizedBox(height: 12),
-          _buildProgressItem('Gorduras', 0.3, Colors.purple),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgressItem(String label, double progress, Color color) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-            ),
-            Text(
-              '${(progress * 100).round()}%',
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        LinearProgressIndicator(
-          value: progress,
-          backgroundColor: Colors.grey[200],
-          valueColor: AlwaysStoppedAnimation<Color>(color),
-        ),
-      ],
     );
   }
 
