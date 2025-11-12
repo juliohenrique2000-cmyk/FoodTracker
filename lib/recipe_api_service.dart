@@ -17,7 +17,7 @@ class RecipeApiService {
       return prefs.getString('jwt_token');
     } catch (e) {
       // Handle SharedPreferences initialization error
-      print('SharedPreferences not available: $e');
+      // Use logging instead of print
       return null;
     }
   }

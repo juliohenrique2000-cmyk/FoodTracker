@@ -1,8 +1,10 @@
 import 'dart:math';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'receipts.dart';
 import 'pantry_screen.dart';
 import 'profile_screen.dart';
@@ -25,12 +27,37 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
   int _currentIndex = 0;
   int _waterCups = 0;
   List<Map<String, dynamic>> _randomRecipes = [];
+  late Map<String, dynamic> _userData;
 
   @override
   void initState() {
     super.initState();
+    _userData = widget.userData;
     _loadWaterIntake();
     _loadRandomRecipes();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final savedPhoto = prefs.getString('profile_photo');
+      Map<String, dynamic> userData = Map.from(widget.userData);
+      if (savedPhoto != null) {
+        try {
+          if (File(savedPhoto).existsSync()) {
+            userData['photo'] = savedPhoto;
+          }
+        } catch (e) {
+          // File doesn't exist or can't be accessed, ignore
+        }
+      }
+      setState(() {
+        _userData = userData;
+      });
+    } catch (e) {
+      debugPrint('Error loading user profile: $e');
+    }
   }
 
   Future<void> _loadWaterIntake() async {
@@ -157,11 +184,11 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-            color: Colors.green.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
+            BoxShadow(
+              color: Colors.green.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
         ],
       ),
       child: Row(
@@ -170,13 +197,13 @@ class _FitnessHomePageState extends State<FitnessHomePage> {
                 radius: 30,
                 backgroundColor: Colors.white,
                 backgroundImage:
-                    widget.userData['photo'] != null &&
-                        widget.userData['photo'].isNotEmpty
-                    ? NetworkImage(widget.userData['photo'])
+                    _userData['photo'] != null && _userData['photo'].isNotEmpty
+                    ? (_userData['photo'].startsWith('http') ||
+                              _userData['photo'].startsWith('blob:')
+                          ? NetworkImage(_userData['photo'])
+                          : FileImage(File(_userData['photo'])))
                     : null,
-                child:
-                    widget.userData['photo'] == null ||
-                        widget.userData['photo'].isEmpty
+                child: _userData['photo'] == null || _userData['photo'].isEmpty
                     ? const Icon(
                         Icons.person,
                         size: 30,

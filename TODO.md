@@ -1,17 +1,33 @@
-# UI/UX Modernization Plan for Flutter Nutrition App
+# TODO: Fix Flutter App Errors
 
-## Overview
-Modernize the Flutter nutrition app to 2025 standards: Material 3, dynamic colors, soft shadows, rounded corners, micro-interactions, modern typography, clean layout, responsive design.
+## 1. Fix Drift Dependency
+- [ ] Move `drift` from dev_dependencies to dependencies in pubspec.yaml
 
-## Steps
-1. Update pubspec.yaml with new dependencies (google_fonts, flutter_animate, animations).
-2. Update main.dart to use Material 3 theme with custom color scheme.
-3. Redesign login screen in main.dart with modern UI elements.
-4. Redesign home screen in home.dart with new components, animations, and layout.
-5. Update receipts.dart for consistency.
-6. Update pantry_screen.dart for consistency.
-7. Update profile_screen.dart for consistency.
-8. Update credits_screen.dart for consistency.
-9. Ensure responsiveness across all screens.
-10. Test micro-interactions and animations.
-11. Run flutter pub get and test the app.
+## 2. Fix NativeDatabase Import
+- [ ] Ensure proper imports in lib/database/drift_database.dart
+
+## 3. Fix Deprecated withOpacity
+- [ ] Replace `withOpacity` with `withValues()` in lib/home.dart
+- [ ] Replace `withOpacity` with `withValues()` in lib/main.dart
+
+## 4. Fix BuildContext Async Gap
+- [ ] Add mounted check in lib/profile_screen.dart
+
+## 5. Fix Unnecessary Null Comparison
+- [ ] Fix in lib/receipts.dart
+
+## 6. Fix Avoid Print
+- [ ] Use logging instead of print in lib/recipe_api_service.dart
+
+## 7. Fix isBetweenValues Method
+- [ ] Use `isBetween` instead in lib/services/database_service.dart
+
+## 8. Fix Unused Variable
+- [ ] Remove unused variable in lib/services/database_service.dart
+
+## 9. Fix Value Import
+- [ ] Import Value from drift in lib/services/database_service.dart
+
+## 10. Run Commands
+- [ ] Run `flutter pub get`
+- [ ] Run `flutter analyze` to verify fixes

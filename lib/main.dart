@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.inter().fontFamily,
         cardTheme: CardThemeData(
           elevation: 4,
-          shadowColor: const Color(0x1F000000),
+          shadowColor: const Color(0x1F000000).withValues(alpha: 0.1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

@@ -30,6 +30,7 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
   bool isLoading = true;
 
   final ImagePicker _picker = ImagePicker();
+  Map<String, dynamic>? selectedRecipe;
 
   @override
   void initState() {
@@ -90,6 +91,11 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         );
       }
     }
+  }
+
+  bool _isRecipeSelected(Map<String, dynamic> recipe) {
+    return selectedRecipe != null &&
+        selectedRecipe!['name'] == recipe['receita'];
   }
 
   String _mapTypeToCategory(String? tipo) {
